@@ -1,0 +1,33 @@
+{
+  "name": "donatio",
+  "version": "1.0.0",
+  "description": "An AWSRaiseUp project by [Abdul-Muiz Yusuff](https://github.com/sacrael) & [Josh Malek](https://github.com/joshmalek)",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshmalek/donatio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshmalek/donatio/issues"
+  },
+  "homepage": "https://github.com/joshmalek/donatio#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.2",
+    "@babel/node": "^7.10.1",
+    "@babel/preset-env": "^7.10.2"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.14.3",
+    "express": "^4.17.1",
+    "graphql": "^15.1.0",
+    "mongoose": "^5.9.18",
+    "nodemon": "^2.0.4"
+  }
+}

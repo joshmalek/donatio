@@ -1,2 +1,4 @@
-# donatio
-A gameified Non-profit donation app/extension built for Amazon Raise-up 2020.
+# donat.io
+An AWSRaiseUp project by [Abdul-Muiz Yusuff](https://github.com/sacrael) & [Josh Malek](https://github.com/joshmalek)
+
+-----
