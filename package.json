@@ -2,7 +2,7 @@
   "name": "donatio",
   "version": "1.0.0",
   "description": "An AWSRaiseUp project by [Abdul-Muiz Yusuff](https://github.com/sacrael) & [Josh Malek](https://github.com/joshmalek)",
-  "main": "server.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js"
   },
