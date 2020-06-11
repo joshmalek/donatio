@@ -1,17 +1,19 @@
 import mongoose from 'mongoose';
-import Medal from './medal.schema';
+const {MedalSchema} = require('./medal.schema').schema;
 
 var Schema = mongoose.Schema;
 
-var User = new Schema({
+var UserSchema = new Schema({
     firstName: String,
     lastName: String,
     email: String,
     experience: Number,
     medals: {
-        type: [Medal],
+        type: [MedalSchema],
         default: []
-    }
+    },
+    total_donated: Number
 })
 
-export default mongoose.model("User", User);
+const User = mongoose.model('User', UserSchema);
+module.exports = User;

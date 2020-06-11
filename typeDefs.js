@@ -2,24 +2,21 @@ import { gql } from "apollo-server-express"
 
 export const typeDefs = gql`
   type Query {
-    hello: String!
-    getUser(id: Int!): User
+    getUser(id: String!): User
   }
-
-  type Mutation {
-    createUser(firstName: String!, lastName: String!): User!
-    createPolicy(enactor: Int!, name: String!): Policy!
-  }
-
+  
   type User {
     firstName: String!
     lastName: String!
-    id: Int!
-    policies: [Policy]
+    email: String!
+    experience: Int!
+    medals: [Medal]
+    total_donated: Float!
   }
 
-  type Policy {
+  type Medal {
     name: String!
-    enactor: Int!
+    description: String!
+    img_url: String!
   }
 `

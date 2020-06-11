@@ -14,7 +14,6 @@ const startServer = async () => {
     typeDefs,
     resolvers
   })
-  console.log(process.env.ATLAS_URI)
   server.applyMiddleware({ app })
   const uri = process.env.ATLAS_URI;
   await mongoose.connect(uri, {useNewUrlParser: true})

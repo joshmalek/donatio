@@ -2,12 +2,12 @@ import mongoose from 'mongoose';
 
 var Schema = mongoose.Schema;
 
-var Medal = new Schema({
+var MedalSchema = new Schema({
     name: String,
     description: String,
     img_url: String
-
 })
 
+const Medal = mongoose.model('Medal', MedalSchema);
 
-export default mongoose.model("Medal", Medal);
+module.exports = Medal;
