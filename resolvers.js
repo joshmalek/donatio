@@ -1,18 +1,5 @@
-let database = {
-  users: [{
-    firstName: 'Joe',
-    lastName: 'Biden',
-    id: 1,
-    policies: []
-  },{
-    firstName: 'Donald',
-    lastName: 'Trump',
-    id: 2,
-    policies: []
-  }]
-}
-
-let policies = []
+import {MedalSchema} from './schemas/medal.schema'
+import {UserSchema} from './schemas/user.schema'
 
 export const resolvers = {
   Query: {

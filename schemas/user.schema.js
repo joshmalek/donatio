@@ -11,7 +11,8 @@ var User = new Schema({
     medals: {
         type: [Medal],
         default: []
-    }
+    },
+    total_donated: Number
 })
 
-export default mongoose.model("User", User);
+export const UserSchema = mongoose.model("User", User);
