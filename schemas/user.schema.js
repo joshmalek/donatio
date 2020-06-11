@@ -3,7 +3,7 @@ import Medal from './medal.schema';
 
 var Schema = mongoose.Schema;
 
-var User = new Schema({
+var UserSchema = new Schema({
     firstName: String,
     lastName: String,
     email: String,
@@ -15,4 +15,4 @@ var User = new Schema({
     total_donated: Number
 })
 
-export const UserSchema = mongoose.model("User", User);
+export default User = mongoose.model("User", UserSchema);
