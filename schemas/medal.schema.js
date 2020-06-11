@@ -8,5 +8,6 @@ var MedalSchema = new Schema({
     img_url: String
 })
 
+const Medal = mongoose.model('Medal', MedalSchema);
 
-export default Medal = mongoose.model("Medal", MedalSchema);
+module.exports = Medal;
