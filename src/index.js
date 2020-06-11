@@ -3,6 +3,9 @@ import express from 'express'
 import mongoose from 'mongoose'
 import {typeDefs} from '../typeDefs'
 import {resolvers} from '../resolvers'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const startServer = async () => {
 
@@ -11,10 +14,10 @@ const startServer = async () => {
     typeDefs,
     resolvers
   })
-
+  console.log(process.env.ATLAS_URI)
   server.applyMiddleware({ app })
-
-  await mongoose.connect("mongodb://localhost:27017/donatio", {useNewUrlParser: true})
+  const uri = process.env.ATLAS_URI;
+  await mongoose.connect(uri, {useNewUrlParser: true})
         .then(() => {console.log(`Successfully connected to mongoose database`)},
               err => {console.log(`Error connecting to mongoose database`)})
 
