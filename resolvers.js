@@ -11,6 +11,13 @@ export const resolvers = {
     nonprofits: async () => {
       const nonprofits = await Nonprofit.find()
       return nonprofits
+    },
+    NPOofDay: async () => {
+
+      // npo of the day is stored in document with id: 5ee31d9b19a821c0a63b094b
+      let npo_info = await Nonprofit.findById('5ee31d9b19a821c0a63b094b')
+      let selected_nonprofit = await Nonprofit.findById(npo_info.npo_id)
+      return selected_nonprofit.toObject()
     }
   },
 
@@ -33,6 +40,19 @@ export const resolvers = {
       nonprofit.priority = nonprofit.priority + 1
       nonprofit = await nonprofit.save ()
       return nonprofit.toObject ()
+
+    },
+    setNPOofDay: async (_, {_id}) => {
+
+      let new_npoOfDay = await Nonprofit.findById(_id)
+      if (!new_npoOfDay) return null
+
+      let npo_info = await Nonprofit.findById('5ee31d9b19a821c0a63b094b')
+      npo_info.npo_id = _id
+      npo_info = await npo_info.save ()
+      console.log(npo_info)
+
+      return new_npoOfDay.toObject ()
 
     }
   }

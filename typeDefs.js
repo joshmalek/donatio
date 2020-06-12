@@ -4,11 +4,13 @@ export const typeDefs = gql`
   type Query {
     user(_id: String!): User
     nonprofits: [Nonprofit]
+    NPOofDay: Nonprofit
   }
 
   type Mutation {
     addNonprofit(vendor_id: String, vendor_organization_reference: String, name: String): Nonprofit
     updateNonprofitPriority(_id: String!): Nonprofit
+    setNPOofDay(_id: String!): Nonprofit
   }
 
   type User {
