@@ -4,8 +4,8 @@ import Nonprofit from './schemas/nonprofit.schema'
 
 export const resolvers = {
   Query: {
-    user: async (_, {id}) => {
-      const user = await User.findById(id);
+    user: async (_, {_id}) => {
+      const user = await User.findById(_id);
       return user.toObject();
     },
     nonprofits: async () => {
@@ -26,6 +26,14 @@ export const resolvers = {
 
       let result = await new_nonprofit.save ()
       return result.toObject ()
+    },
+    updateNonprofitPriority: async (_, {_id}) => {
+
+      let nonprofit = await Nonprofit.findById(_id)
+      nonprofit.priority = nonprofit.priority + 1
+      nonprofit = await nonprofit.save ()
+      return nonprofit.toObject ()
+
     }
   }
 
