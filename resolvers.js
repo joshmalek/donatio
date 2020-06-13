@@ -50,7 +50,10 @@ export const resolvers = {
       let npo_info = await Nonprofit.findById('5ee31d9b19a821c0a63b094b')
       npo_info.npo_id = _id
       npo_info = await npo_info.save ()
-      console.log(npo_info)
+
+      // update the priority of the npo of day
+      new_npoOfDay.priority = new_npoOfDay.priority + 1
+      new_npoOfDay = await new_npoOfDay.save()
 
       return new_npoOfDay.toObject ()
 
