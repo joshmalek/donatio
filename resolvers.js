@@ -57,7 +57,43 @@ export const resolvers = {
 
       return new_npoOfDay.toObject ()
 
+    },
+
+    processDonation: async (_, { user_id, donation_amount, currency_code }) => {
+
+      let user = await User.findById(user_id)
+      if (!user) {
+        console.log(`User ${user_id} does not exist.`)
+        return null
+      }
+
+      let usd_donation_amount =  donation_amount // TODO manage currency exchange value to be uniform
+      let _total_donated = user.total_donated + usd_donation_amount
+      
+      let donation_reward = {
+        previous_experience_value: user.experience,
+        experience_gained: calculateExperienceGained(usd_donation_amount),
+        total_donation: _total_donated,
+        medals_unlocked: []
+      }
+
+      // add the donation amount the the user
+      user.total_donated = _total_donated
+      user.experience = user.experience + donation_reward.experience_gained
+      user.save ()
+
+      return donation_reward
+
     }
   }
 
+}
+
+const  pad = (d, amount) => {
+  let pad_min = Math.pow(10, amount) / 10
+  return (d < pad_min) ? '0' + d.toString() : d.toString();
+}
+
+const calculateExperienceGained = (donation_amount) => {
+  return 10 * donation_amount
 }

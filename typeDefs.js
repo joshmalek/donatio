@@ -11,6 +11,14 @@ export const typeDefs = gql`
     addNonprofit(vendor_id: String, vendor_organization_reference: String, name: String): Nonprofit
     updateNonprofitPriority(_id: String!): Nonprofit
     setNPOofDay(_id: String!): Nonprofit
+    processDonation(user_id: String!, donation_amount: Int!, currency_code: String!): DonationReward
+  }
+
+  type DonationReward {
+    previous_experience_value: Int!,
+    experience_gained: Int!,
+    total_donation: Int!,
+    medals_unlocked: [Medal]!
   }
 
   type User {
