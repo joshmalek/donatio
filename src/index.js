@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import {typeDefs} from '../typeDefs'
 import {resolvers} from '../resolvers'
 import dotenv from 'dotenv'
+import { dailyNonprofitSelection } from '../cron_jobs/NonprofitSelection.cron'
 
 dotenv.config()
 
@@ -23,6 +24,9 @@ const startServer = async () => {
   app.listen({ port: 4000 }, () => {
     console.log(`Server ready @ http://localhost:4000${server.graphqlPath}`)
   })
+
+  // Start the cron jobs
+  dailyNonprofitSelection.start()
 
 }
 
