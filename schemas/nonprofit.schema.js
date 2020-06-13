@@ -7,7 +7,8 @@ var NonprofitSchema = new Schema({
   vendor_organization_reference: String,
   name: String,
   priority: Number,
-  npo_id: Schema.Types.ObjectId
+  npo_id: Schema.Types.ObjectId,
+  amount_donated: Number
 })
 
 const Nonprofit = mongoose.model('Nonprofit', NonprofitSchema)

@@ -37,4 +37,11 @@ export const typeDefs = gql`
     priority: Int!
     _id: ID!
   }
+
+  type NPO {
+    name: String!
+    org_id: String!
+    priority: Int!
+    amount_donated: Float!
+  }
 `
