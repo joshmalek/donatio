@@ -10,7 +10,7 @@ export const resolvers = {
       return user.toObject();
     },
     nonprofits: async () => {
-      const nonprofits = await Nonprofit.find()
+      const nonprofits = await Nonprofit.find({ _id: { "$ne" : "5ee31d9b19a821c0a63b094b" } })
       return nonprofits
     },
     NPOofDay: async () => {
