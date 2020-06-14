@@ -1,6 +1,7 @@
 import Medal from './schemas/medal.schema'
 import User from './schemas/user.schema'
 import Nonprofit from './schemas/nonprofit.schema'
+import { processMedals } from './modules/medals.module'
 
 export const resolvers = {
   Query: {
@@ -18,6 +19,9 @@ export const resolvers = {
       let npo_info = await Nonprofit.findById('5ee31d9b19a821c0a63b094b')
       let selected_nonprofit = await Nonprofit.findById(npo_info.npo_id)
       return selected_nonprofit.toObject()
+    },
+    medals: async () => {
+      return await Medal.find()
     }
   },
 
@@ -70,17 +74,27 @@ export const resolvers = {
       let usd_donation_amount =  donation_amount // TODO manage currency exchange value to be uniform
       let _total_donated = user.total_donated + usd_donation_amount
       
+      // process the medals that the user unlocks
+      let medals_earned = processMedals(user, usd_donation_amount)
+
+      // add the medals to the user's array of medals earned
+      user.medals = [...user.medals, ...medals_earned]
+
       let donation_reward = {
         previous_experience_value: user.experience,
         experience_gained: calculateExperienceGained(usd_donation_amount),
         total_donation: _total_donated,
-        medals_unlocked: []
+        medals_unlocked: medals_earned
       }
 
       // add the donation amount the the user
       user.total_donated = _total_donated
       user.experience = user.experience + donation_reward.experience_gained
+      console.log(user)
       user.save ()
+
+      console.log(`Donation reward`)
+      console.log(donation_reward)
 
       return donation_reward
 
