@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-const {MedalSchema} = require('./medal.schema').schema;
+const Medal = require('./medal.schema');
 
 var Schema = mongoose.Schema;
 
@@ -8,10 +8,7 @@ var UserSchema = new Schema({
     lastName: String,
     email: String,
     experience: Number,
-    medals: {
-        type: [MedalSchema],
-        default: []
-    },
+    medals: [Medal.schema],
     total_donated: Number
 })
 
