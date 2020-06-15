@@ -3,6 +3,8 @@ import User from './schemas/user.schema'
 import Nonprofit from './schemas/nonprofit.schema'
 import { processMedals } from './modules/medals.module'
 
+import MedalAPI from './API/medals.api'
+
 export const resolvers = {
   Query: {
     user: async (_, {_id}) => {
@@ -21,7 +23,8 @@ export const resolvers = {
       return selected_nonprofit.toObject()
     },
     medals: async () => {
-      return await Medal.find()
+      return MedalAPI.getMedals ()
+      // return await Medal.find()
     }
   },
 

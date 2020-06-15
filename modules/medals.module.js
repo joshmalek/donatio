@@ -2,15 +2,14 @@
 // information and their updated information
 
 import axios from 'axios'
+import MedalAPI from '../API/medals.api'
 import { STRING_REFS } from '../string.refs'
 
 let medals_
 const setupMedals = async () => {
-    return axios.post(STRING_REFS.API_URL, {
-        'query': `{ medals { name, description, img_url, process_func, _id } }`
-    })
+    return MedalAPI.getMedals()
     .then(response => {
-        medals_ = response.data.data.medals
+        medals_ = response
         if(medals_){
             console.log(medals_)
         }
@@ -18,12 +17,13 @@ const setupMedals = async () => {
             throw new Error(response.status)
         }
     })
+    .catch(err => {
+        console.log(`Error in setupMedals ()`)
+        console.log(err)
+    })
 }
 
 setupMedals()
-.catch(err =>{
-    console.log("error")
-})
 
 // this block is causing issues, we need to properly wrap an await incase 
 // that data is undefined.  Leaving it commented for now.  
