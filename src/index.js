@@ -17,7 +17,7 @@ const startServer = async () => {
   })
   server.applyMiddleware({ app })
   const uri = process.env.ATLAS_URI;
-  await mongoose.connect(uri, {useNewUrlParser: true})
+  await mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
         .then(() => {console.log(`Successfully connected to mongoose database`)},
               err => {console.log(`Error connecting to mongoose database`)})
 

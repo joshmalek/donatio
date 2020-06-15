@@ -16,9 +16,10 @@ setupMedals ()
     console.log(`[module:medals] Problem setting up Medals module.`)
 })
 .then(response => {
-    console.log(`Medals Module Response`)
+    //response comes back clean
+    //console.log(`Medals Module Response`)
     medals_ = response.data.data.medals
-    console.log(medals_)
+    //console.log(medals_)
 })
 
 //=========================================================================
