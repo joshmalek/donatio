@@ -9,18 +9,34 @@ const setupMedals = async () => {
     return axios.post(STRING_REFS.API_URL, {
         'query': `{ medals { name, description, img_url, process_func, _id } }`
     })
+    .then(response => {
+        medals_ = response.data.data.medals
+        if(medals_){
+            console.log(medals_)
+        }
+        else{
+            throw new Error(response.status)
+        }
+    })
 }
 
-setupMedals ()
-.catch(err => {
-    console.log(`[module:medals] Problem setting up Medals module.`)
+setupMedals()
+.catch(err =>{
+    console.log("error")
 })
-.then(response => {
+
+// this block is causing issues, we need to properly wrap an await incase 
+// that data is undefined.  Leaving it commented for now.  
+//setupMedals ()
+//.catch(err => {
+//    console.log(`[module:medals] Problem setting up Medals module.`)
+//})
+//.then(response => {
     //response comes back clean
     //console.log(`Medals Module Response`)
-    medals_ = response.data.data.medals
+//    medals_ = response.data.data.medals
     //console.log(medals_)
-})
+//})
 
 //=========================================================================
 
