@@ -11,6 +11,10 @@ export const resolvers = {
       const user = await User.findById(_id);
       return user.toObject();
     },
+    users: async () => {
+      const users = await User.find();
+      return users;
+    },
     nonprofits: async () => {
       const nonprofits = await Nonprofit.find({ _id: { "$ne" : "5ee31d9b19a821c0a63b094b" } })
       return nonprofits
@@ -76,7 +80,7 @@ export const resolvers = {
 
       let usd_donation_amount =  donation_amount // TODO manage currency exchange value to be uniform
       let _total_donated = user.total_donated + usd_donation_amount
-      
+
       // process the medals that the user unlocks
       let medals_earned = processMedals(user, usd_donation_amount)
 

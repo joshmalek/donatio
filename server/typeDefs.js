@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express"
 export const typeDefs = gql`
   type Query {
     user(_id: String!): User
+    users: [User]
     nonprofits: [Nonprofit]
     NPOofDay: Nonprofit
     medals: [Medal]
