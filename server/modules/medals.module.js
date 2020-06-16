@@ -11,6 +11,7 @@ const setupMedals = async () => {
     .then(response => {
         medals_ = response
         if(medals_){
+            console.log(`Medal setup complete!`)
             console.log(medals_)
         }
         else{
@@ -45,7 +46,7 @@ const rewardMedal = (process_func) => {
     medals_.forEach(medal => {
 
         if (medal.process_func == process_func) {
-            reward_ = { ...medal }
+            reward_ = { ...medal._doc }
         }
     })
     return reward_
