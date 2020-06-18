@@ -1,9 +1,43 @@
+import TwitterLite from 'twitter-lite'
+import Twitter from 'twitter'
+import axios from 'axios'
+import qs from 'qs'
+
 import Medal from './schemas/medal.schema'
 import User from './schemas/user.schema'
 import Nonprofit from './schemas/nonprofit.schema'
 import { processMedals } from './modules/medals.module'
+import { twitterCallbackMonitor, twitterCallbackInitiate, twitterCallbackResponse } from './modules/twitterCallbackMatcher.module'
 
 import MedalAPI from './API/medals.api'
+
+const twitterLiteClient = new TwitterLite({
+  consumer_key: 'ElvTnb0OJ3J9DSF9cCI3HZXTl',
+  consumer_secret: '807do5gaUWt4q5WPZH4pvPOyGczFtyzRoEktlSbiJ0lFqSXcNM'
+})
+
+const verifyTwitterCreds = (oauth_token, oauth_verifier) => {
+  return axios({
+    method: 'POST',
+    url: 'https://api.twitter.com/oauth/access_token',
+    data: qs.stringify({
+      oauth_consumer_key: "ElvTnb0OJ3J9DSF9cCI3HZXTl", // TODO HIDE THIS!
+      oauth_token,
+      oauth_verifier
+    }),
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+    }
+  })
+  .then(res => {
+    console.log(`Twitter API:`)
+    return res.data
+  })
+  .catch(err => {
+    console.log(`Twitter API Error:`)
+    console.log(err)
+  })
+}
 
 export const resolvers = {
   Query: {
@@ -29,6 +63,70 @@ export const resolvers = {
     medals: async () => {
       return MedalAPI.getMedals ()
       // return await Medal.find()
+    },
+    initiateTwitterAuth: async (_, __, ctx) => {
+
+      let auth_response = await twitterLiteClient.getRequestToken("https://donatio-site.herokuapp.com/twitter")
+      console.log(auth_response)
+      twitterCallbackInitiate(auth_response)
+
+      return {
+        oauth_token: auth_response.oauth_token,
+        oauth_token_secret: auth_response.oauth_token_secret
+      }
+    },
+    monitorTwitterAuth: async (_, {oauth_token}) => {
+
+      // This call should manage twitterCallback and wait for a response,
+      // or timeout when the time limit has been reached
+
+      let twitter_data = await twitterCallbackMonitor(oauth_token)
+      console.log(`Monitor response:`)
+      console.log(twitter_data)
+      
+      return {
+        oauth_token: twitter_data.access_token,
+        oauth_token_secret: twitter_data.access_token_secret
+      }
+
+    },
+    processTwitterAuth: async (_, {oauth_token, oauth_verifier}) => {
+
+      console.log(`ProcessTwiterAuth: ${oauth_token}, ${oauth_verifier}`)
+      let response = await verifyTwitterCreds(oauth_token, oauth_verifier)
+      let parsed_response = qs.parse(response)
+
+      console.log(`process twitter auth response...`)
+      console.log(parsed_response)
+
+      // pass parsed response to twitterCallbackResponse
+      twitterCallbackResponse( 
+        oauth_token, 
+        parsed_response.oauth_token,
+        parsed_response.oauth_token_secret
+      )
+
+      return true
+      // return {
+      //   oauth_token: parsed_response.oauth_token,
+      //   oauth_token_secret: parsed_response.oauth_token_secret
+      // }
+
+    },
+    sendTweet: async (_, {access_token, access_token_secret, tweet}) => {
+
+      const twitterClient = new Twitter({
+        consumer_key: "ElvTnb0OJ3J9DSF9cCI3HZXTl",
+        consumer_secret: "807do5gaUWt4q5WPZH4pvPOyGczFtyzRoEktlSbiJ0lFqSXcNM",
+        access_token_key: access_token,
+        access_token_secret: access_token_secret,
+      })
+
+      twitterClient.post('statuses/update', {
+        status: tweet
+      })
+
+      return true
     }
   },
 
