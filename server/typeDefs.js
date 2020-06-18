@@ -7,6 +7,10 @@ export const typeDefs = gql`
     nonprofits: [Nonprofit]
     NPOofDay: Nonprofit
     medals: [Medal]
+    initiateTwitterAuth: TwitterAuthResponse,
+    processTwitterAuth(oauth_token: String!, oauth_verifier: String!): Boolean
+    monitorTwitterAuth(oauth_token: String!): TwitterAuthResponse
+    sendTweet(access_token: String!, access_token_secret: String!, tweet: String!): Boolean
   }
 
   type Mutation {
@@ -14,6 +18,11 @@ export const typeDefs = gql`
     updateNonprofitPriority(_id: String!): Nonprofit
     setNPOofDay(_id: String!): Nonprofit
     processDonation(user_id: String!, donation_amount: Float!, currency_code: String!): DonationReward
+  }
+
+  type TwitterAuthResponse {
+    oauth_token: String!,
+    oauth_token_secret: String!
   }
 
   type DonationReward {

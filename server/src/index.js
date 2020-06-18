@@ -1,4 +1,4 @@
-import {ApolloServer, gql} from "apollo-server-express"
+import { ApolloServer } from "apollo-server-express"
 import express from 'express'
 import mongoose from 'mongoose'
 import {typeDefs} from '../typeDefs'
@@ -14,15 +14,15 @@ dotenv.config()
 const startServer = async () => {
 
   const app = express ()
-  const loggingMiddleware = (req, res, next) => {
-    console.log(`IP: `, req.ip)
-    next()
-  }
-  app.use(loggingMiddleware)
 
   const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    // context: async ({ req, connection }) => {
+    //   console.log("Connection recieved:")
+    //   console.log(Object.keys(req))
+    //   console.log(req.connection)
+    // }
   })
   server.applyMiddleware({ app })
   const uri = process.env.ATLAS_URI;
