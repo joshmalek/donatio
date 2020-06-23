@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express"
+import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
   type Query {
@@ -7,28 +7,47 @@ export const typeDefs = gql`
     nonprofits: [Nonprofit]
     NPOofDay: Nonprofit
     medals: [Medal]
-    initiateTwitterAuth: TwitterAuthResponse,
+    initiateTwitterAuth: TwitterAuthResponse
     processTwitterAuth(oauth_token: String!, oauth_verifier: String!): Boolean
     monitorTwitterAuth(oauth_token: String!): TwitterAuthResponse
-    sendTweet(access_token: String!, access_token_secret: String!, tweet: String!): Boolean
+    sendTweet(
+      access_token: String!
+      access_token_secret: String!
+      tweet: String!
+    ): Boolean
   }
 
   type Mutation {
-    addNonprofit(vendor_id: String, vendor_organization_reference: String, name: String): Nonprofit
+    addNonprofit(
+      vendor_id: String
+      vendor_organization_reference: String
+      name: String
+    ): Nonprofit
     updateNonprofitPriority(_id: String!): Nonprofit
     setNPOofDay(_id: String!): Nonprofit
-    processDonation(user_id: String!, donation_amount: Float!, currency_code: String!): DonationReward
+    processDonation(
+      user_id: String!
+      donation_amount: Float!
+      currency_code: String!
+    ): DonationReward
+  }
+
+  type Reciept {
+    npo_id: ID!
+    user_id: ID!
+    amount: Float!
+    iso_dateTime: String
   }
 
   type TwitterAuthResponse {
-    oauth_token: String!,
+    oauth_token: String!
     oauth_token_secret: String!
   }
 
   type DonationReward {
-    previous_experience_value: Float!,
-    experience_gained: Float!,
-    total_donation: Float!,
+    previous_experience_value: Float!
+    experience_gained: Float!
+    total_donation: Float!
     medals_unlocked: [Medal]!
   }
 
@@ -64,4 +83,4 @@ export const typeDefs = gql`
     priority: Int!
     amount_donated: Float!
   }
-`
+`;

@@ -1,9 +1,9 @@
-import Medal from '../schemas/medal.schema'
+import Medal from "../schemas/medal.schema";
 
 const MedalAPI = {
-    getMedals: async () => {
-        return await Medal.find ()
-    }
-}
+  getMedals: async () => {
+    return await Medal.find();
+  },
+};
 
-module.exports = MedalAPI
+module.exports = MedalAPI;

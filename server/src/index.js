@@ -1,41 +1,37 @@
-import { ApolloServer } from "apollo-server-express"
-import express from 'express'
-import mongoose from 'mongoose'
-import {typeDefs} from '../typeDefs'
-import {resolvers} from '../resolvers'
-import dotenv from 'dotenv'
-import { dailyNonprofitSelection } from '../cron_jobs/NonprofitSelection.cron'
+import { ApolloServer } from "apollo-server-express";
+import express from "express";
+import mongoose from "mongoose";
+import { typeDefs } from "../typeDefs";
+import { resolvers } from "../resolvers";
+import dotenv from "dotenv";
+import { dailyNonprofitSelection } from "../cron_jobs/NonprofitSelection.cron";
 
-import Twitter from 'twitter'
-import TwitterLite from 'twitter-lite'
+import Twitter from "twitter";
+import TwitterLite from "twitter-lite";
 
-dotenv.config()
+dotenv.config();
 
 const startServer = async () => {
-
-  const app = express ()
+  const app = express();
 
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    // context: async ({ req, connection }) => {
-    //   console.log("Connection recieved:")
-    //   console.log(Object.keys(req))
-    //   console.log(req.connection)
-    // }
-  })
-  server.applyMiddleware({ app })
+  });
+  server.applyMiddleware({ app });
   const uri = process.env.ATLAS_URI;
-  await mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
-        .then(() => {console.log(`Successfully connected to mongoose database`)},
-              err => {console.log(`Error connecting to mongoose database`)})
+  await mongoose
+    .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+      console.log(`Successfully connected to mongoose database`);
+    });
 
   app.listen({ port: 4000 }, () => {
-    console.log(`Server ready @ http://localhost:4000${server.graphqlPath}`)
-  })
+    console.log(`Server ready @ http://localhost:4000${server.graphqlPath}`);
+  });
 
   // Start the cron jobs
-  dailyNonprofitSelection.start()
+  dailyNonprofitSelection.start();
 
   // test Twitter
   // let twitterClient = new Twitter({
@@ -67,7 +63,6 @@ const startServer = async () => {
   // .catch(err => {
   //   console.log(err)
   // })
+};
 
-}
-
-startServer ()
+startServer();
