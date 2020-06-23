@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 var Schema = mongoose.Schema;
 
 var RecieptSchema = new Schema({
-  npi_id: Schema.Types.ObjectId,
+  npo_id: Schema.Types.ObjectId,
   user_id: Schema.Types.ObjectId,
   amount: Number,
-  dateTime: Date,
+  date_time: Date,
 });
 
 const Reciept = mongoose.model("Reciept", RecieptSchema);
-module.expirts = Reciept;
+module.exports = Reciept;
