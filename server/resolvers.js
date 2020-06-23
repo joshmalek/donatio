@@ -118,8 +118,8 @@ export const resolvers = {
     },
     sendTweet: async (_, { access_token, access_token_secret, tweet }) => {
       const twitterClient = new Twitter({
-        consumer_key: "ElvTnb0OJ3J9DSF9cCI3HZXTl",
-        consumer_secret: "807do5gaUWt4q5WPZH4pvPOyGczFtyzRoEktlSbiJ0lFqSXcNM",
+        consumer_key: process.env.TWITTER_CONSUMER_KEY,
+        consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
         access_token_key: access_token,
         access_token_secret: access_token_secret,
       });
