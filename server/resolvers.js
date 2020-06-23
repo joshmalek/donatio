@@ -192,6 +192,12 @@ export const resolvers = {
 
       // process the medals that the user unlocks
       let medals_earned = processMedals(user, usd_donation_amount);
+      medals_earned = medals_earned.map((medal_) => {
+        return {
+          ...medal_,
+          date_awarded: now_.toISOString(),
+        };
+      });
 
       // add the medals to the user's array of medals earned
       user.medals = [...user.medals, ...medals_earned];

@@ -64,9 +64,11 @@ export const typeDefs = gql`
   type Medal {
     name: String!
     description: String!
-    img_url: String!
+    alt_description: String
+    asset_key: String
     _id: ID!
     process_func: String!
+    date_awarded: String
   }
 
   type Nonprofit {

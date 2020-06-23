@@ -25,19 +25,6 @@ const setupMedals = async () => {
 
 setupMedals();
 
-// this block is causing issues, we need to properly wrap an await incase
-// that data is undefined.  Leaving it commented for now.
-//setupMedals ()
-//.catch(err => {
-//    console.log(`[module:medals] Problem setting up Medals module.`)
-//})
-//.then(response => {
-//response comes back clean
-//console.log(`Medals Module Response`)
-//    medals_ = response.data.data.medals
-//console.log(medals_)
-//})
-
 //=========================================================================
 
 const rewardMedal = (process_func) => {
@@ -84,26 +71,31 @@ const processMedals = (user_data, normalized_donation_amount) => {
   return medals_earned;
 };
 
+// This is where we determine which awards to give a user after each donation.
+// The key of the _process corresponds to the process_func field value of the medal
+// in the database.
+//
+// If the user meets the defined criterion, they will be given the award.
+
 const _process = {
   _first_donation: (user_data, normalized_donation_amount) => {
-    // Determine whether the user earns their first donation
-    // medal.
-    console.log(`Processing first donation!`);
-
-    console.log(`First donation ? ${user_data.total_donated == 0}`);
     if (user_data.total_donated == 0) return rewardMedal("_first_donation");
   },
   _milestone_one: (user_data, normalized_donation_amount) => {
-    if (user_data.total_donated >= 5) return rewardMedal("_milestone_one");
+    if (user_data.total_donated + normalized_donation_amount >= 5)
+      return rewardMedal("_milestone_one");
   },
   _milestone_two: (user_data, normalized_donation_amount) => {
-    if (user_data.total_donated >= 10) return rewardMedal("_milestone_one");
+    if (user_data.total_donated + normalized_donation_amount >= 10)
+      return rewardMedal("_milestone_two");
   },
   _milestone_three: (user_data, normalized_donation_amount) => {
-    if (user_data.total_donated >= 20) return rewardMedal("_milestone_one");
+    if (user_data.total_donated + normalized_donation_amount >= 20)
+      return rewardMedal("_milestone_three");
   },
   _milestone_four: (user_data, normalized_donation_amount) => {
-    if (user_data.total_donated >= 40) return rewardMedal("_milestone_one");
+    if (user_data.total_donated + normalized_donation_amount >= 40)
+      return rewardMedal("_milestone_four");
   },
 };
 
