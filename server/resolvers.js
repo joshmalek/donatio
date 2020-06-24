@@ -82,6 +82,20 @@ export const resolvers = {
         oauth_token_secret: auth_response.oauth_token_secret,
       };
     },
+    weekReciepts: async (_, { user_id }) => {
+      let week_start = new Date();
+      week_start.setDate(week_start.getDate() - week_start.getDay());
+
+      let user_reciepts = await Reciept.find({
+        user_id: user_id,
+        date_time: { $gt: week_start },
+      });
+
+      return user_reciepts.map((reciept_) => {
+        reciept_.iso_dateTime = new Date(reciept_.date_time).toISOString();
+        return reciept_;
+      });
+    },
     monitorTwitterAuth: async (_, { oauth_token }) => {
       // This call should manage twitterCallback and wait for a response,
       // or timeout when the time limit has been reached
