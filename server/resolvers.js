@@ -96,6 +96,26 @@ export const resolvers = {
         return reciept_;
       });
     },
+    userLockedMedals: async (_, { _id }) => {
+      // Find the medals that the user with id= _id has not unlocked yet
+      let user = await User.findById(_id);
+      if (!user) {
+        return [];
+      }
+
+      let user_medals = user.medals;
+      let all_medals = await MedalAPI.getMedals();
+
+      return all_medals.filter((medal_) => {
+        // only accept the medals that are not in user_medals
+        for (let i in user_medals) {
+          if (user_medals[i]._id.equals(medal_._id)) {
+            return false;
+          }
+        }
+        return true;
+      });
+    },
     monitorTwitterAuth: async (_, { oauth_token }) => {
       // This call should manage twitterCallback and wait for a response,
       // or timeout when the time limit has been reached
