@@ -3,10 +3,12 @@ import { gql } from "apollo-server-express";
 export const typeDefs = gql`
   type Query {
     user(_id: String!): User
+    userLockedMedals(_id: String!): [Medal]
     users: [User]
     nonprofits: [Nonprofit]
     NPOofDay: Nonprofit
     medals: [Medal]
+    weekReciepts(user_id: String!): [Reciept]
     initiateTwitterAuth: TwitterAuthResponse
     processTwitterAuth(oauth_token: String!, oauth_verifier: String!): Boolean
     monitorTwitterAuth(oauth_token: String!): TwitterAuthResponse

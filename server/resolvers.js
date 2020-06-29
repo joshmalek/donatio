@@ -56,13 +56,13 @@ export const resolvers = {
     },
     nonprofits: async () => {
       const nonprofits = await Nonprofit.find({
-        _id: { $ne: "5ee31d9b19a821c0a63b094b" },
+        _id: { $ne: "5efa4e0f83d4c7657784589a" },
       });
       return nonprofits;
     },
     NPOofDay: async () => {
-      // npo of the day is stored in document with id: 5ee31d9b19a821c0a63b094b
-      let npo_info = await Nonprofit.findById("5ee31d9b19a821c0a63b094b");
+      // npo of the day is stored in document with id: 5efa4e0f83d4c7657784589a
+      let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
       let selected_nonprofit = await Nonprofit.findById(npo_info.npo_id);
       return selected_nonprofit.toObject();
     },
@@ -81,6 +81,40 @@ export const resolvers = {
         oauth_token: auth_response.oauth_token,
         oauth_token_secret: auth_response.oauth_token_secret,
       };
+    },
+    weekReciepts: async (_, { user_id }) => {
+      let week_start = new Date();
+      week_start.setDate(week_start.getDate() - week_start.getDay());
+
+      let user_reciepts = await Reciept.find({
+        user_id: user_id,
+        date_time: { $gt: week_start },
+      });
+
+      return user_reciepts.map((reciept_) => {
+        reciept_.iso_dateTime = new Date(reciept_.date_time).toISOString();
+        return reciept_;
+      });
+    },
+    userLockedMedals: async (_, { _id }) => {
+      // Find the medals that the user with id= _id has not unlocked yet
+      let user = await User.findById(_id);
+      if (!user) {
+        return [];
+      }
+
+      let user_medals = user.medals;
+      let all_medals = await MedalAPI.getMedals();
+
+      return all_medals.filter((medal_) => {
+        // only accept the medals that are not in user_medals
+        for (let i in user_medals) {
+          if (user_medals[i]._id.equals(medal_._id)) {
+            return false;
+          }
+        }
+        return true;
+      });
     },
     monitorTwitterAuth: async (_, { oauth_token }) => {
       // This call should manage twitterCallback and wait for a response,
@@ -157,7 +191,7 @@ export const resolvers = {
       let new_npoOfDay = await Nonprofit.findById(_id);
       if (!new_npoOfDay) return null;
 
-      let npo_info = await Nonprofit.findById("5ee31d9b19a821c0a63b094b");
+      let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
       npo_info.npo_id = _id;
       npo_info = await npo_info.save();
 
@@ -180,7 +214,7 @@ export const resolvers = {
 
       // Create donation reciept
       let now_ = new Date();
-      let npo_info = await Nonprofit.findById("5ee31d9b19a821c0a63b094b");
+      let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
       console.log(`AMOUNT: ${usd_donation_amount}`);
       let reciept_ = new Reciept({
         npo_id: npo_info.npo_id,
