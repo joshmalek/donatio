@@ -56,13 +56,13 @@ export const resolvers = {
     },
     nonprofits: async () => {
       const nonprofits = await Nonprofit.find({
-        _id: { $ne: "5ee31d9b19a821c0a63b094b" },
+        _id: { $ne: "5efa4e0f83d4c7657784589a" },
       });
       return nonprofits;
     },
     NPOofDay: async () => {
-      // npo of the day is stored in document with id: 5ee31d9b19a821c0a63b094b
-      let npo_info = await Nonprofit.findById("5ee31d9b19a821c0a63b094b");
+      // npo of the day is stored in document with id: 5efa4e0f83d4c7657784589a
+      let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
       let selected_nonprofit = await Nonprofit.findById(npo_info.npo_id);
       return selected_nonprofit.toObject();
     },
@@ -191,7 +191,7 @@ export const resolvers = {
       let new_npoOfDay = await Nonprofit.findById(_id);
       if (!new_npoOfDay) return null;
 
-      let npo_info = await Nonprofit.findById("5ee31d9b19a821c0a63b094b");
+      let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
       npo_info.npo_id = _id;
       npo_info = await npo_info.save();
 
@@ -214,7 +214,7 @@ export const resolvers = {
 
       // Create donation reciept
       let now_ = new Date();
-      let npo_info = await Nonprofit.findById("5ee31d9b19a821c0a63b094b");
+      let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
       console.log(`AMOUNT: ${usd_donation_amount}`);
       let reciept_ = new Reciept({
         npo_id: npo_info.npo_id,
