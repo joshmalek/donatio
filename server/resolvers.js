@@ -13,6 +13,7 @@ import {
   twitterCallbackInitiate,
   twitterCallbackResponse,
 } from "./modules/twitterCallbackMatcher.module";
+import AmazonPayAPI from "./modules/amazonPay.module";
 
 import MedalAPI from "./API/medals.api";
 
@@ -258,8 +259,11 @@ export const resolvers = {
       _,
       { donation_amount, currency_code, order_reference_id }
     ) => {
-      console.log(`Donation Amount: ${currency_code} ${donation_amount}`);
-      console.log(`Order Ref ID: ${order_reference_id}`);
+      AmazonPayAPI.SetOrderReferenceDetails(
+        donation_amount,
+        currency_code,
+        order_reference_id
+      );
 
       // return a Donation Reward
       return {
