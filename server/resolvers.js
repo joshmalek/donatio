@@ -26,7 +26,7 @@ const verifyTwitterCreds = (oauth_token, oauth_verifier) => {
     method: "POST",
     url: "https://api.twitter.com/oauth/access_token",
     data: qs.stringify({
-      oauth_consumer_key: "ElvTnb0OJ3J9DSF9cCI3HZXTl", // TODO HIDE THIS!
+      oauth_consumer_key: process.env.TWITTER_CONSUMER_KEY, // TODO HIDE THIS!
       oauth_token,
       oauth_verifier,
     }),
