@@ -254,6 +254,21 @@ export const resolvers = {
 
       return donation_reward;
     },
+    processAmazonPay: async (
+      _,
+      { donation_amount, currency_code, order_reference_id }
+    ) => {
+      console.log(`Donation Amount: ${currency_code} ${donation_amount}`);
+      console.log(`Order Ref ID: ${order_reference_id}`);
+
+      // return a Donation Reward
+      return {
+        previous_experience_value: 0,
+        experience_gained: 0,
+        total_donation: -1,
+        medals_unlocked: [],
+      };
+    },
   },
 };
 
