@@ -23,7 +23,8 @@ const dailyNonprofitSelection = new cron.CronJob('0 0 * * *', () => {
 
 })
 
-const dailyDonationTweet = new cron.CronJob('0 17 * * *'), () => {
+//tweet every day at 5pm how much was donated to the nonprofit of the day
+const dailyDonationTweet = new cron.CronJob('0 17 * * *', () => {
   console.log("Tweeting our daily donation totals\n");
 
   axios.post('http://localhost:4000/graphql',{
@@ -32,6 +33,13 @@ const dailyDonationTweet = new cron.CronJob('0 17 * * *'), () => {
   .then(res => {
     let nonprofits = res.data.data.nonprofits
     //retrieve nonprofit of the day
+    //tweet structure
+    //  Today DonatIO users donated ${total} to {NPOofDay}!  Thank you to everyone who donated.
+    //  Our new nonprofit will be {new_npoOfDay}.  Let's help them out! 
   })
-}
+  .catch(err => {
+    console.log('Error fetching nonprofits...')
+    console.log(err)
+  })
+})
 export { dailyNonprofitSelection }
