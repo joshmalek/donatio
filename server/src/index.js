@@ -28,7 +28,7 @@ const startServer = async () => {
   });
 
   // Start the cron jobs
-  dailyNonprofitSelection.start();
+  // dailyNonprofitSelection.start();
 };
 
 startServer();

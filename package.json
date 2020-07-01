@@ -35,12 +35,15 @@
     "axios": "^0.19.2",
     "cron": "^1.8.2",
     "dotenv": "^8.2.0",
+    "exec-sh": "^0.3.4",
     "express": "^4.17.1",
     "graphql": "^15.1.0",
     "mongoose": "^5.9.18",
     "nodemon": "^2.0.4",
     "qs": "^6.9.4",
+    "query-string": "^6.13.1",
     "twitter": "^1.7.1",
-    "twitter-lite": "^0.14.0"
+    "twitter-lite": "^0.14.0",
+    "urlencode": "^1.1.0"
   }
 }

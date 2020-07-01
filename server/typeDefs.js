@@ -36,7 +36,12 @@ export const typeDefs = gql`
       donation_amount: Int!
       currency_code: String!
       order_reference_id: String!
-    ): DonationReward
+    ): AmazonPayResponse
+  }
+
+  type AmazonPayResponse {
+    success: Boolean!
+    reciept_id: ID
   }
 
   type Reciept {
