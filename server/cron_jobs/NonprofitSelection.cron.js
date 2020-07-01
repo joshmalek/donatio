@@ -19,6 +19,19 @@ const dailyNonprofitSelection = new cron.CronJob('0 0 * * *', () => {
     console.log(err)
   })
 
+
+
 })
 
+const dailyDonationTweet = new cron.CronJob('0 17 * * *'), () => {
+  console.log("Tweeting our daily donation totals\n");
+
+  axios.post('http://localhost:4000/graphql',{
+    query: '{nonprofits{name,priority,id}}'
+  })
+  .then(res => {
+    let nonprofits = res.data.data.nonprofits
+    //retrieve nonprofit of the day
+  })
+}
 export { dailyNonprofitSelection }
