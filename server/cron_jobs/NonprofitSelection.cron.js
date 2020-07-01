@@ -1,7 +1,8 @@
 import cron from 'cron'
 import axios from 'axios'
 
-const dailyNonprofitSelection = new cron.CronJob('* * * 1 * *', () => {
+//run everyday at midnight
+const dailyNonprofitSelection = new cron.CronJob('0 0 * * *', () => {
   console.log(`\nDailyNonprofitSelection Cron Job Running`)
   let start_time = new Date ()
   console.log(`${start_time.getMonth() + 1}/${start_time.getDay()}/${start_time.getFullYear()}`)
