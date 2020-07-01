@@ -13,6 +13,7 @@ import {
   twitterCallbackInitiate,
   twitterCallbackResponse,
 } from "./modules/twitterCallbackMatcher.module";
+import AmazonPayAPI from "./modules/amazonPay.module";
 
 import MedalAPI from "./API/medals.api";
 
@@ -26,7 +27,7 @@ const verifyTwitterCreds = (oauth_token, oauth_verifier) => {
     method: "POST",
     url: "https://api.twitter.com/oauth/access_token",
     data: qs.stringify({
-      oauth_consumer_key: "ElvTnb0OJ3J9DSF9cCI3HZXTl", // TODO HIDE THIS!
+      oauth_consumer_key: process.env.TWITTER_CONSUMER_KEY, // TODO HIDE THIS!
       oauth_token,
       oauth_verifier,
     }),
@@ -253,6 +254,36 @@ export const resolvers = {
       console.log(donation_reward);
 
       return donation_reward;
+    },
+    processAmazonPay: async (
+      _,
+      { donation_amount, currency_code, order_reference_id }
+    ) => {
+      let result = AmazonPayAPI.SetOrderReferenceDetails(
+        donation_amount,
+        currency_code,
+        order_reference_id
+      );
+
+      // create donation reciept
+      if (result) {
+        let now_ = new Date();
+        let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
+        let reciept_ = new Reciept({
+          npo_id: npo_info.npo_id,
+          user_id: "5ee2a62b9bd5ef93fc546c02",
+          amount: donation_amount,
+          date_time: now_,
+        });
+        let donation_reciept = await reciept_.save();
+
+        return {
+          success: true,
+          reciept_id: donation_reciept._id,
+        };
+      }
+
+      return { success: result };
     },
   },
 };
