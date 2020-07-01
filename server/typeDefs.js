@@ -27,13 +27,9 @@ export const typeDefs = gql`
     ): Nonprofit
     updateNonprofitPriority(_id: String!): Nonprofit
     setNPOofDay(_id: String!): Nonprofit
-    processDonation(
-      user_id: String!
-      donation_amount: Float!
-      currency_code: String!
-    ): DonationReward
+    processDonation(reciept_id: String!): DonationReward
     processAmazonPay(
-      donation_amount: Int!
+      donation_amount: Float!
       currency_code: String!
       order_reference_id: String!
     ): AmazonPayResponse
@@ -49,6 +45,7 @@ export const typeDefs = gql`
     user_id: ID!
     amount: Float!
     iso_dateTime: String
+    claimed: Boolean
   }
 
   type TwitterAuthResponse {

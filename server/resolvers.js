@@ -203,27 +203,27 @@ export const resolvers = {
       return new_npoOfDay.toObject();
     },
 
-    processDonation: async (_, { user_id, donation_amount, currency_code }) => {
-      let user = await User.findById(user_id);
-      if (!user) {
-        console.log(`User ${user_id} does not exist.`);
+    processDonation: async (_, { reciept_id }) => {
+      // 1. Find the reciept that.
+      let reciept = await Reciept.findById(reciept_id);
+      if (!reciept || reciept.claimed) {
+        // reciept does not exist.
         return null;
       }
 
-      let usd_donation_amount = donation_amount; // TODO manage currency exchange value to be uniform
+      let user = await User.findById(reciept.user_id);
+      if (!user) {
+        console.log(`User ${reciept.user_id} does not exist.`);
+        return null;
+      }
+
+      let usd_donation_amount = reciept.amount; // TODO manage currency exchange value to be uniform
       let _total_donated = user.total_donated + usd_donation_amount;
 
-      // Create donation reciept
+      // mark the reciept as claimed now
       let now_ = new Date();
-      let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
-      console.log(`AMOUNT: ${usd_donation_amount}`);
-      let reciept_ = new Reciept({
-        npo_id: npo_info.npo_id,
-        user_id: user_id,
-        amount: usd_donation_amount,
-        date_time: now_,
-      });
-      reciept_.save();
+      reciept.claimed = true;
+      reciept.save();
 
       // process the medals that the user unlocks
       let medals_earned = processMedals(user, usd_donation_amount);
@@ -274,6 +274,7 @@ export const resolvers = {
           user_id: "5ee2a62b9bd5ef93fc546c02",
           amount: donation_amount,
           date_time: now_,
+          claimed: false,
         });
         let donation_reciept = await reciept_.save();
 
