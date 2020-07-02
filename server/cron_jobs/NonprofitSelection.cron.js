@@ -6,8 +6,8 @@ const dailyNonprofitSelection = new cron.CronJob('59 16 * * *', () => {
   console.log(`\nDailyNonprofitSelection Cron Job Running`)
   let start_time = new Date ()
   console.log(`${start_time.getMonth() + 1}/${start_time.getDay()}/${start_time.getFullYear()}`)
-
-  axios.post('http://localhost:4000/graphql', {
+  var url = 'http://localhost:4000/graphql';
+  axios.post(url, {
     query: '{ nonprofits { name, priority, id } }'
   })
   .then(res => {
@@ -28,7 +28,7 @@ const dailyDonationTweet = new cron.CronJob('0 17 * * *', () => {
   console.log("Tweeting our daily donation totals\n");
 
   //change this to retrieve npo of day, new npo, and
-  axios.post('http://localhost:4000/graphql',{
+  axios.post(url,{
     query: '{nonprofits{name,priority,id}}'
   })
   .then(res => {
