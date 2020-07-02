@@ -33,6 +33,7 @@ export const typeDefs = gql`
       donation_amount: Float!
       currency_code: String!
       order_reference_id: String!
+      user_id: String!
     ): AmazonPayResponse
   }
 

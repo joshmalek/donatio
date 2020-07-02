@@ -251,6 +251,9 @@ export const resolvers = {
         return null;
       }
 
+      console.log("Reciept Info:");
+      console.log(reciept);
+
       let user = await User.findById(reciept.user_id);
       if (!user) {
         console.log(`User ${reciept.user_id} does not exist.`);
@@ -302,7 +305,8 @@ export const resolvers = {
       let result = await AmazonPayAPI.SetOrderReferenceDetails(
         donation_amount,
         currency_code,
-        order_reference_id
+        order_reference_id,
+        user_id
       );
       console.log(`THE API RETURNED ${result}`);
 
@@ -312,7 +316,7 @@ export const resolvers = {
         let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
         let reciept_ = new Reciept({
           npo_id: npo_info.npo_id,
-          user_id: "5ee2a62b9bd5ef93fc546c02",
+          user_id: user_id,
           amount: donation_amount,
           date_time: now_,
           claimed: false,
