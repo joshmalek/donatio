@@ -39,7 +39,7 @@ const AmazonPayAPI = {
   RequestUserData: async (access_token) => {
     console.log(`Requesting User Data!`);
 
-    let args = `${access_token} ${process.env.AMAZON_CLIENT_ID}`;
+    let args = `${urlencode(access_token)} ${process.env.AMAZON_CLIENT_ID}`;
     execSh(
       `python server/python_modules/amazonAuthRequest.py ${args}`,
       true,
