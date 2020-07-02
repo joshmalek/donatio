@@ -167,9 +167,42 @@ export const resolvers = {
     },
     requestAmazonCreds: async (_, { access_token }) => {
       let response = await AmazonPayAPI.RequestUserData(access_token);
-      console.log("IMMEDIATE!");
-      console.log(response);
 
+      if (response) {
+        // Check if a user with this email exists on our platform. If so, then
+        // this is the user that will recieve the donation points.
+        // Otherwise, create the new user.
+
+        let user_result = await User.findOne({ email: response.email });
+
+        if (!user_result) {
+          // create the user
+          let middle_index = response.name.indexOf(" ");
+          let firstName = response.name.substring(0, middle_index);
+          let lastName = response.name.substring(middle_index);
+          console.log(firstName);
+          console.log(lastName);
+          let new_user = new User({
+            firstName,
+            lastName,
+            email: response.email,
+            experience: 0,
+            medals: [],
+            total_donated: 0,
+            email_confirmed: false,
+          });
+          user_result = await new_user.save();
+        }
+
+        return {
+          email: response.email,
+          first_name: user_result.firstName,
+          last_name: user_result.lastName,
+          user_id: user_result._id,
+        };
+      }
+
+      // default return
       return response;
     },
   },
@@ -266,11 +299,12 @@ export const resolvers = {
       _,
       { donation_amount, currency_code, order_reference_id }
     ) => {
-      let result = AmazonPayAPI.SetOrderReferenceDetails(
+      let result = await AmazonPayAPI.SetOrderReferenceDetails(
         donation_amount,
         currency_code,
         order_reference_id
       );
+      console.log(`THE API RETURNED ${result}`);
 
       // create donation reciept
       if (result) {

@@ -1,5 +1,6 @@
 import sys
 from amazon_pay.client import AmazonPayClient
+import time
 
 # AmazonPay Python SDK Info: https://github.com/amzn/amazon-pay-sdk-python
 
@@ -17,14 +18,16 @@ def SetOrderAttributes (**kwargs):
     )
     print(client)
 
+    timestamp_ = time.time()
     ret = client.set_order_attributes(
     amazon_order_reference_id=kwargs["ORDER_REF_ID"],
     amount=kwargs["ORDER_TOTAL"],
     currency_code=kwargs["CURRENCY_CODE"],
-    seller_note='My seller note.',
-    seller_order_id='MY_UNIQUE_ORDER_ID',
-    store_name='My store name.',
-    custom_information='My custom information.')
+    seller_note='Thank you for donating {} {} to the charity of the day!'.format(kwargs["ORDER_TOTAL"], kwargs["CURRENCY_CODE"]),
+    seller_order_id='#-donatio-{}-{}'.format(timestamp_, kwargs["ORDER_TOTAL"]),
+    store_name='Donatio: Gamify your Charity',
+    custom_information='-')
+    print("Set Order Attributes")
     print(ret.to_json())
 
     response = client.confirm_order_reference(
@@ -33,7 +36,14 @@ def SetOrderAttributes (**kwargs):
         failure_url="https://donatio-site.herokuapp.com/paymentStatus?success=false"
     )
 
-    print(response)
+    print("Confirm Order Reference")
+    print(response.to_json())
+
+    ## Check the status of the order confirmation
+    # reference_details = client.get_order_reference_details(
+    #     amazon_order_reference_id
+
+    # )
 
 if __name__ == "__main__":
 

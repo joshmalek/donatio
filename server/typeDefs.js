@@ -38,7 +38,8 @@ export const typeDefs = gql`
 
   type AmazonUserData {
     email: String
-    name: String
+    first_name: String
+    last_name: String
     user_id: String
   }
 
@@ -75,6 +76,7 @@ export const typeDefs = gql`
     medals: [Medal]
     total_donated: Float!
     _id: ID!
+    email_confirmed: Boolean
   }
 
   type Medal {
