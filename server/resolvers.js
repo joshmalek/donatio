@@ -166,14 +166,11 @@ export const resolvers = {
       return true;
     },
     requestAmazonCreds: async (_, { access_token }) => {
-      let response = AmazonPayAPI.RequestUserData(access_token);
+      let response = await AmazonPayAPI.RequestUserData(access_token);
+      console.log("IMMEDIATE!");
+      console.log(response);
 
-      return {
-        // AmazonUserData
-        email: "",
-        name: "",
-        user_id: "",
-      };
+      return response;
     },
   },
 

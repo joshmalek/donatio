@@ -3,10 +3,11 @@
 
 import io
 import pycurl
-# import urllib
 import json
 import sys
 import urllib.parse
+
+# reference : https://images-na.ssl-images-amazon.com/images/G/01/lwa/dev/docs/website-gsg._TTH_.pdf
 
 class Storage:
     def __init__(self):
@@ -63,8 +64,9 @@ def amazonAuth(**kwargs):
         sys.exit ()
 
     response_str = b.getvalue().decode("utf-8")
-    d = json.loads(b.getvalue())
-    print(str(d))
+    print(response_str)
+    # d = json.loads(b.getvalue())
+    # print(str(d))
 
 
 if __name__ == "__main__":
