@@ -300,7 +300,7 @@ export const resolvers = {
     },
     processAmazonPay: async (
       _,
-      { donation_amount, currency_code, order_reference_id }
+      { donation_amount, currency_code, order_reference_id, user_id }
     ) => {
       let result = await AmazonPayAPI.SetOrderReferenceDetails(
         donation_amount,
