@@ -7,6 +7,7 @@ var RecieptSchema = new Schema({
   user_id: Schema.Types.ObjectId,
   amount: Number,
   date_time: Date,
+  claimed: Boolean,
 });
 
 const Reciept = mongoose.model("Reciept", RecieptSchema);

@@ -17,6 +17,7 @@ export const typeDefs = gql`
       access_token_secret: String!
       tweet: String!
     ): Boolean
+    requestAmazonCreds(access_token: String!): AmazonUserData
   }
 
   type Mutation {
@@ -27,16 +28,20 @@ export const typeDefs = gql`
     ): Nonprofit
     updateNonprofitPriority(_id: String!): Nonprofit
     setNPOofDay(_id: String!): Nonprofit
-    processDonation(
-      user_id: String!
+    processDonation(reciept_id: String!): DonationReward
+    processAmazonPay(
       donation_amount: Float!
       currency_code: String!
-    ): DonationReward
-    processAmazonPay(
-      donation_amount: Int!
-      currency_code: String!
       order_reference_id: String!
+      user_id: String!
     ): AmazonPayResponse
+  }
+
+  type AmazonUserData {
+    email: String
+    first_name: String
+    last_name: String
+    user_id: String
   }
 
   type AmazonPayResponse {
@@ -49,6 +54,7 @@ export const typeDefs = gql`
     user_id: ID!
     amount: Float!
     iso_dateTime: String
+    claimed: Boolean
   }
 
   type TwitterAuthResponse {
@@ -71,6 +77,7 @@ export const typeDefs = gql`
     medals: [Medal]
     total_donated: Float!
     _id: ID!
+    email_confirmed: Boolean
   }
 
   type Medal {

@@ -165,6 +165,46 @@ export const resolvers = {
 
       return true;
     },
+    requestAmazonCreds: async (_, { access_token }) => {
+      let response = await AmazonPayAPI.RequestUserData(access_token);
+
+      if (response) {
+        // Check if a user with this email exists on our platform. If so, then
+        // this is the user that will recieve the donation points.
+        // Otherwise, create the new user.
+
+        let user_result = await User.findOne({ email: response.email });
+
+        if (!user_result) {
+          // create the user
+          let middle_index = response.name.indexOf(" ");
+          let firstName = response.name.substring(0, middle_index);
+          let lastName = response.name.substring(middle_index);
+          console.log(firstName);
+          console.log(lastName);
+          let new_user = new User({
+            firstName,
+            lastName,
+            email: response.email,
+            experience: 0,
+            medals: [],
+            total_donated: 0,
+            email_confirmed: false,
+          });
+          user_result = await new_user.save();
+        }
+
+        return {
+          email: response.email,
+          first_name: user_result.firstName,
+          last_name: user_result.lastName,
+          user_id: user_result._id,
+        };
+      }
+
+      // default return
+      return response;
+    },
   },
 
   Mutation: {
@@ -203,27 +243,30 @@ export const resolvers = {
       return new_npoOfDay.toObject();
     },
 
-    processDonation: async (_, { user_id, donation_amount, currency_code }) => {
-      let user = await User.findById(user_id);
-      if (!user) {
-        console.log(`User ${user_id} does not exist.`);
+    processDonation: async (_, { reciept_id }) => {
+      // 1. Find the reciept that.
+      let reciept = await Reciept.findById(reciept_id);
+      if (!reciept || reciept.claimed) {
+        // reciept does not exist.
         return null;
       }
 
-      let usd_donation_amount = donation_amount; // TODO manage currency exchange value to be uniform
+      console.log("Reciept Info:");
+      console.log(reciept);
+
+      let user = await User.findById(reciept.user_id);
+      if (!user) {
+        console.log(`User ${reciept.user_id} does not exist.`);
+        return null;
+      }
+
+      let usd_donation_amount = reciept.amount; // TODO manage currency exchange value to be uniform
       let _total_donated = user.total_donated + usd_donation_amount;
 
-      // Create donation reciept
+      // mark the reciept as claimed now
       let now_ = new Date();
-      let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
-      console.log(`AMOUNT: ${usd_donation_amount}`);
-      let reciept_ = new Reciept({
-        npo_id: npo_info.npo_id,
-        user_id: user_id,
-        amount: usd_donation_amount,
-        date_time: now_,
-      });
-      reciept_.save();
+      reciept.claimed = true;
+      reciept.save();
 
       // process the medals that the user unlocks
       let medals_earned = processMedals(user, usd_donation_amount);
@@ -257,13 +300,15 @@ export const resolvers = {
     },
     processAmazonPay: async (
       _,
-      { donation_amount, currency_code, order_reference_id }
+      { donation_amount, currency_code, order_reference_id, user_id }
     ) => {
-      let result = AmazonPayAPI.SetOrderReferenceDetails(
+      let result = await AmazonPayAPI.SetOrderReferenceDetails(
         donation_amount,
         currency_code,
-        order_reference_id
+        order_reference_id,
+        user_id
       );
+      console.log(`THE API RETURNED ${result}`);
 
       // create donation reciept
       if (result) {
@@ -271,9 +316,10 @@ export const resolvers = {
         let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
         let reciept_ = new Reciept({
           npo_id: npo_info.npo_id,
-          user_id: "5ee2a62b9bd5ef93fc546c02",
+          user_id: user_id,
           amount: donation_amount,
           date_time: now_,
+          claimed: false,
         });
         let donation_reciept = await reciept_.save();
 
