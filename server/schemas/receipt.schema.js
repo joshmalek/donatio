@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 var Schema = mongoose.Schema;
 
-var RecieptSchema = new Schema({
+var ReceiptSchema = new Schema({
   npo_id: Schema.Types.ObjectId,
   user_id: Schema.Types.ObjectId,
   amount: Number,
@@ -10,5 +10,5 @@ var RecieptSchema = new Schema({
   claimed: Boolean,
 });
 
-const Reciept = mongoose.model("Reciept", RecieptSchema);
-module.exports = Reciept;
+const Receipt = mongoose.model("Receipt", ReceiptSchema);
+module.exports = Receipt;
