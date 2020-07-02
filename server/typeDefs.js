@@ -17,6 +17,7 @@ export const typeDefs = gql`
       access_token_secret: String!
       tweet: String!
     ): Boolean
+    requestAmazonCreds(access_token: String!): AmazonUserData
   }
 
   type Mutation {
@@ -33,6 +34,12 @@ export const typeDefs = gql`
       currency_code: String!
       order_reference_id: String!
     ): AmazonPayResponse
+  }
+
+  type AmazonUserData {
+    email: String
+    name: String
+    user_id: String
   }
 
   type AmazonPayResponse {

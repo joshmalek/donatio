@@ -36,6 +36,24 @@ const AmazonPayAPI = {
 
     return order_success;
   },
+  RequestUserData: async (access_token) => {
+    console.log(`Requesting User Data!`);
+
+    let args = `${access_token} ${process.env.AMAZON_CLIENT_ID}`;
+    execSh(
+      `python server/python_modules/amazonAuthRequest.py ${args}`,
+      true,
+      (err, stdout, stderr) => {
+        if (err) {
+          console.log("Error");
+          console.log(err);
+        } else {
+          console.log(`STDOUT:\n${stdout}`);
+          console.log(`STDERR:\n${stderr}`);
+        }
+      }
+    );
+  },
 };
 
 export default AmazonPayAPI;

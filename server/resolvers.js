@@ -165,6 +165,16 @@ export const resolvers = {
 
       return true;
     },
+    requestAmazonCreds: async (_, { access_token }) => {
+      let response = AmazonPayAPI.RequestUserData(access_token);
+
+      return {
+        // AmazonUserData
+        email: "",
+        name: "",
+        user_id: "",
+      };
+    },
   },
 
   Mutation: {
