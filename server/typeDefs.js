@@ -8,8 +8,7 @@ export const typeDefs = gql`
     nonprofits: [Nonprofit]
     NPOofDay: Nonprofit
     medals: [Medal]
-    receipts: [Receipt]
-    weekReceipts(user_id: String!): [Receipt]
+    weekReciepts(user_id: String!): [Reciept]
     initiateTwitterAuth: TwitterAuthResponse
     processTwitterAuth(oauth_token: String!, oauth_verifier: String!): Boolean
     monitorTwitterAuth(oauth_token: String!): TwitterAuthResponse
@@ -29,13 +28,14 @@ export const typeDefs = gql`
     ): Nonprofit
     updateNonprofitPriority(_id: String!): Nonprofit
     setNPOofDay(_id: String!): Nonprofit
-    processDonation(receipt_id: String!): DonationReward
+    processDonation(reciept_id: String!): DonationReward
     processAmazonPay(
       donation_amount: Float!
       currency_code: String!
       order_reference_id: String!
       user_id: String!
     ): AmazonPayResponse
+    initiateEmailConfirmation(user_id: String!): Boolean
   }
 
   type AmazonUserData {
@@ -47,10 +47,10 @@ export const typeDefs = gql`
 
   type AmazonPayResponse {
     success: Boolean!
-    receipt_id: ID
+    reciept_id: ID
   }
 
-  type Receipt {
+  type Reciept {
     npo_id: ID!
     user_id: ID!
     amount: Float!
@@ -79,6 +79,7 @@ export const typeDefs = gql`
     total_donated: Float!
     _id: ID!
     email_confirmed: Boolean
+    confirmation_string: String
   }
 
   type Medal {

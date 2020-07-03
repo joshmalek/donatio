@@ -2,8 +2,11 @@ import TwitterLite from "twitter-lite";
 import Twitter from "twitter";
 import axios from "axios";
 import qs from "qs";
+import randomstring from "randomstring";
+import sendmail from "sendmail";
+import nodemailer from "nodemailer";
 
-import Receipt from "./schemas/receipt.schema";
+import Reciept from "./schemas/reciept.schema";
 import Medal from "./schemas/medal.schema";
 import User from "./schemas/user.schema";
 import Nonprofit from "./schemas/nonprofit.schema";
@@ -61,7 +64,6 @@ export const resolvers = {
       });
       return nonprofits;
     },
-
     NPOofDay: async () => {
       // npo of the day is stored in document with id: 5efa4e0f83d4c7657784589a
       let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
@@ -84,22 +86,18 @@ export const resolvers = {
         oauth_token_secret: auth_response.oauth_token_secret,
       };
     },
-    receipts: async () => {
-      const receipts = await Receipt.find();
-      return receipts;
-    },
-    weekReceipts: async (_, { user_id }) => {
+    weekReciepts: async (_, { user_id }) => {
       let week_start = new Date();
       week_start.setDate(week_start.getDate() - week_start.getDay());
 
-      let user_receipts = await Receipt.find({
+      let user_reciepts = await Reciept.find({
         user_id: user_id,
         date_time: { $gt: week_start },
       });
 
-      return user_receipts.map((receipt_) => {
-        receipt_.iso_dateTime = new Date(receipt_.date_time).toISOString();
-        return receipt_;
+      return user_reciepts.map((reciept_) => {
+        reciept_.iso_dateTime = new Date(reciept_.date_time).toISOString();
+        return reciept_;
       });
     },
     userLockedMedals: async (_, { _id }) => {
@@ -248,30 +246,31 @@ export const resolvers = {
       return new_npoOfDay.toObject();
     },
 
-    processDonation: async (_, { receipt_id }) => {
-      // 1. Find the receipt that.
-      let receipt = await Receipt.findById(receipt_id);
-      if (!receipt || receipt.claimed) {
-        // receipt does not exist.
+    processDonation: async (_, { reciept_id }) => {
+      // 1. Find the reciept that.
+      console.log("Processing Donation");
+      let reciept = await Reciept.findById(reciept_id);
+      if (!reciept || reciept.claimed) {
+        // reciept does not exist.
         return null;
       }
 
-      console.log("Receipt Info:");
-      console.log(receipt);
+      console.log("Reciept Info:");
+      console.log(reciept);
 
-      let user = await User.findById(receipt.user_id);
+      let user = await User.findById(reciept.user_id);
       if (!user) {
-        console.log(`User ${receipt.user_id} does not exist.`);
+        console.log(`User ${reciept.user_id} does not exist.`);
         return null;
       }
 
-      let usd_donation_amount = receipt.amount; // TODO manage currency exchange value to be uniform
+      let usd_donation_amount = reciept.amount; // TODO manage currency exchange value to be uniform
       let _total_donated = user.total_donated + usd_donation_amount;
 
-      // mark the receipt as claimed now
+      // mark the reciept as claimed now
       let now_ = new Date();
-      receipt.claimed = true;
-      receipt.save();
+      reciept.claimed = true;
+      reciept.save();
 
       // process the medals that the user unlocks
       let medals_earned = processMedals(user, usd_donation_amount);
@@ -315,26 +314,95 @@ export const resolvers = {
       );
       console.log(`THE API RETURNED ${result}`);
 
-      // create donation receipt
+      // create donation reciept
       if (result) {
         let now_ = new Date();
         let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
-        let receipt_ = new Receipt({
+        let reciept_ = new Reciept({
           npo_id: npo_info.npo_id,
           user_id: user_id,
           amount: donation_amount,
           date_time: now_,
           claimed: false,
         });
-        let donation_receipt = await receipt_.save();
+        let donation_reciept = await reciept_.save();
 
         return {
           success: true,
-          receipt_id: donation_receipt._id,
+          reciept_id: donation_reciept._id,
         };
       }
 
       return { success: result };
+    },
+    initiateEmailConfirmation: async (_, { user_id }) => {
+      // Find the user with user_id and generate a
+      // confirmation string
+      let user = await User.findById(user_id);
+      if (!user) {
+        return false;
+      }
+
+      // generate a confirmation string
+      let confirmation_string = randomstring.generate(64);
+      user.confirmation_string = confirmation_string;
+      user.save();
+
+      // send the email to the user's email.
+      console.log(`Sending email to ${user.email}`);
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.GMAIL_USERNAME,
+          pass: process.env.GMAIL_PASSWORD,
+        },
+      });
+
+      transporter.sendMail(
+        {
+          from: "no-reply@donatio.com", // process.env.GMAIL_USERNAME,
+          to: user.email,
+          subject: "Donatio: Confirmation Email",
+          text: `Hello ${user.firstName} ${user.lastName}, 
+        You're almost done setting up your account!
+        Finish the setup by clicking the confirmation link
+        below and setup your account's password.
+        
+        https://donatio-site.herokuapp.com/confirm?confirm_key=${confirmation_string}
+        
+        Donatio Team`,
+        },
+        function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        }
+      );
+      //////
+      // let send_ = sendmail();
+      // send_(
+      //   {
+      //     from: "no-reply@donatio.com",
+      //     to: user.email,
+      //     subject: "Donatio: Confirmation Email",
+      //     html: `Hello ${user.firstName} ${user.lastName},
+      //     You're almost done setting up your account!
+      //     Finish the setup by clicking the confirmation link
+      //     below and setup your account's password.
+
+      //     https://donatio-site.herokuapp.com/confirm?confirm_key=${confirmation_string}
+
+      //     Donatio Team`,
+      //   },
+      //   function (err, reply) {
+      //     console.log(err && err.stack);
+      //     console.dir(reply);
+      //   }
+      // );
+
+      return true;
     },
   },
 };
