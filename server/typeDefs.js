@@ -35,6 +35,7 @@ export const typeDefs = gql`
       order_reference_id: String!
       user_id: String!
     ): AmazonPayResponse
+    initiateEmailConfirmation(user_id: String!): Boolean
   }
 
   type AmazonUserData {
@@ -78,6 +79,7 @@ export const typeDefs = gql`
     total_donated: Float!
     _id: ID!
     email_confirmed: Boolean
+    confirmation_string: String
   }
 
   type Medal {

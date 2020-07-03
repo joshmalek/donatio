@@ -2,6 +2,8 @@ import TwitterLite from "twitter-lite";
 import Twitter from "twitter";
 import axios from "axios";
 import qs from "qs";
+import randomstring from "randomstring";
+import sendmail from "sendmail";
 
 import Reciept from "./schemas/reciept.schema";
 import Medal from "./schemas/medal.schema";
@@ -330,6 +332,39 @@ export const resolvers = {
       }
 
       return { success: result };
+    },
+    initiateEmailConfirmation: async (_, { user_id }) => {
+      // Find the user with user_id and generate a
+      // confirmation string
+      let user = await User.findById(user_id);
+      if (!user) {
+        return false;
+      }
+
+      // generate a confirmation string
+      let confirmation_string = randomstring.generate(64);
+      user.confirmation_string = confirmation_string;
+      user.save();
+
+      // send the email to the user's email.
+      sendmail(
+        {
+          from: "no-reply@donatio.com",
+          to: user.email,
+          subject: "Donatio: Confirmation Email",
+          html: `Hello ${user.firstName} ${user.lastName}, 
+          You're almost done setting up your account!
+          Finish the setup by clicking the confirmation link
+          below and setup your account's password.
+          
+          https://donatio-site.herokuapp.com/confirm?confirm_key=${confirmation_string}
+          
+          Donatio Team`,
+        },
+        function (err, reply) {}
+      );
+
+      return true;
     },
   },
 };
