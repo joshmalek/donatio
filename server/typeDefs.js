@@ -28,7 +28,7 @@ export const typeDefs = gql`
     ): Nonprofit
     updateNonprofitPriority(_id: String!): Nonprofit
     setNPOofDay(_id: String!): Nonprofit
-    processDonation(reciept_id: String!): DonationReward
+    processDonation(receipt_id: String!): DonationReward
     processAmazonPay(
       donation_amount: Float!
       currency_code: String!
@@ -47,7 +47,7 @@ export const typeDefs = gql`
 
   type AmazonPayResponse {
     success: Boolean!
-    reciept_id: ID
+    receipt_id: ID
   }
 
   type Receipt {
