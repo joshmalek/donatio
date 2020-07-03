@@ -4,6 +4,7 @@ import axios from "axios";
 import qs from "qs";
 import randomstring from "randomstring";
 import sendmail from "sendmail";
+import nodemailer from "nodemailer";
 
 import Reciept from "./schemas/reciept.schema";
 import Medal from "./schemas/medal.schema";
@@ -347,22 +348,58 @@ export const resolvers = {
       user.save();
 
       // send the email to the user's email.
-      sendmail(
+      console.log(`Sending email to ${user.email}`);
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.GMAIL_USERNAME,
+          pass: process.env.GMAIL_PASSWORD,
+        },
+      });
+
+      transporter.sendMail(
         {
           from: "no-reply@donatio.com",
           to: user.email,
           subject: "Donatio: Confirmation Email",
-          html: `Hello ${user.firstName} ${user.lastName}, 
-          You're almost done setting up your account!
-          Finish the setup by clicking the confirmation link
-          below and setup your account's password.
-          
-          https://donatio-site.herokuapp.com/confirm?confirm_key=${confirmation_string}
-          
-          Donatio Team`,
+          text: `Hello ${user.firstName} ${user.lastName}, 
+        You're almost done setting up your account!
+        Finish the setup by clicking the confirmation link
+        below and setup your account's password.
+        
+        https://donatio-site.herokuapp.com/confirm?confirm_key=${confirmation_string}
+        
+        Donatio Team`,
         },
-        function (err, reply) {}
+        function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        }
       );
+      //////
+      // let send_ = sendmail();
+      // send_(
+      //   {
+      //     from: "no-reply@donatio.com",
+      //     to: user.email,
+      //     subject: "Donatio: Confirmation Email",
+      //     html: `Hello ${user.firstName} ${user.lastName},
+      //     You're almost done setting up your account!
+      //     Finish the setup by clicking the confirmation link
+      //     below and setup your account's password.
+
+      //     https://donatio-site.herokuapp.com/confirm?confirm_key=${confirmation_string}
+
+      //     Donatio Team`,
+      //   },
+      //   function (err, reply) {
+      //     console.log(err && err.stack);
+      //     console.dir(reply);
+      //   }
+      // );
 
       return true;
     },
