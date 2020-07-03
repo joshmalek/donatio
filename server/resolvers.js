@@ -248,6 +248,7 @@ export const resolvers = {
 
     processDonation: async (_, { reciept_id }) => {
       // 1. Find the reciept that.
+      console.log("Processing Donation");
       let reciept = await Reciept.findById(reciept_id);
       if (!reciept || reciept.claimed) {
         // reciept does not exist.
