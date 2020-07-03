@@ -215,6 +215,16 @@ export const resolvers = {
   },
 
   Mutation: {
+    setUserPassword: async (_, { user_id, password }) => {
+      let user = await User.findById(user_id);
+      if (!user) return false;
+
+      user.password = password;
+      // TODO encrypt password!!!
+      user.save();
+
+      return true;
+    },
     setEmailConfirmed: async (_, { user_id }) => {
       let user = await User.findById(user_id);
       if (!user) return false;

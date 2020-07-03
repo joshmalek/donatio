@@ -12,6 +12,7 @@ var UserSchema = new Schema({
   total_donated: Number,
   email_confirmed: Boolean,
   confirmation_string: String,
+  password: String,
 });
 
 const User = mongoose.model("User", UserSchema);
