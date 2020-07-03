@@ -46,8 +46,12 @@ const dailyDonationTweet = new cron.CronJob('0 17 * * *', () => {
       let nonprofits = res.data.data.nonprofits
       //retrieve nonprofit of the day
       //tweet structure
-      console.log("Today DonatIO users donated ${total} to {NPOofDay}!  Thank you to everyone who donated.")
-      console.log("Our new nonprofit will be {new_npoOfDay}.  Let's help them out!")
+      client.post('statuses/update', { status: "Today DonatIO users donated ${total} to {NPOofDay}!  Thank you to everyone who donated.\nOur new nonprofit will be {new_npoOfDay}.  Let's help them out!" }, function (error, tweet, response) {
+        if (!error) {
+          console.log(tweet);
+        }
+      });
+
     })
     .catch(err => {
       console.log('Error fetching nonprofits...')
@@ -55,11 +59,8 @@ const dailyDonationTweet = new cron.CronJob('0 17 * * *', () => {
     })
 
 
-  client.post('statuses/update', { status: 'I am a tweet' }, function (error, tweet, response) {
-    if (!error) {
-      console.log(tweet);
-    }
-  });
+
+
 
 
 
