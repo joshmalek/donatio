@@ -6,7 +6,7 @@ import randomstring from "randomstring";
 import sendmail from "sendmail";
 import nodemailer from "nodemailer";
 
-import Reciept from "./schemas/reciept.schema";
+import Receipt from "./schemas/receipt.schema";
 import Medal from "./schemas/medal.schema";
 import User from "./schemas/user.schema";
 import Nonprofit from "./schemas/nonprofit.schema";
@@ -86,18 +86,18 @@ export const resolvers = {
         oauth_token_secret: auth_response.oauth_token_secret,
       };
     },
-    weekReciepts: async (_, { user_id }) => {
+    weekReceipts: async (_, { user_id }) => {
       let week_start = new Date();
       week_start.setDate(week_start.getDate() - week_start.getDay());
 
-      let user_reciepts = await Reciept.find({
+      let user_receipts = await Receipt.find({
         user_id: user_id,
         date_time: { $gt: week_start },
       });
 
-      return user_reciepts.map((reciept_) => {
-        reciept_.iso_dateTime = new Date(reciept_.date_time).toISOString();
-        return reciept_;
+      return user_receipts.map((receipt_) => {
+        receipt_.iso_dateTime = new Date(receipt_.date_time).toISOString();
+        return receipt_;
       });
     },
     userLockedMedals: async (_, { _id }) => {
@@ -246,31 +246,31 @@ export const resolvers = {
       return new_npoOfDay.toObject();
     },
 
-    processDonation: async (_, { reciept_id }) => {
-      // 1. Find the reciept that.
+    processDonation: async (_, { receipt_id }) => {
+      // 1. Find the receipt that.
       console.log("Processing Donation");
-      let reciept = await Reciept.findById(reciept_id);
-      if (!reciept || reciept.claimed) {
-        // reciept does not exist.
+      let receipt = await Receipt.findById(receipt_id);
+      if (!receipt || receipt.claimed) {
+        // receipt does not exist.
         return null;
       }
 
-      console.log("Reciept Info:");
-      console.log(reciept);
+      console.log("Receipt Info:");
+      console.log(receipt);
 
-      let user = await User.findById(reciept.user_id);
+      let user = await User.findById(receipt.user_id);
       if (!user) {
-        console.log(`User ${reciept.user_id} does not exist.`);
+        console.log(`User ${receipt.user_id} does not exist.`);
         return null;
       }
 
-      let usd_donation_amount = reciept.amount; // TODO manage currency exchange value to be uniform
+      let usd_donation_amount = receipt.amount; // TODO manage currency exchange value to be uniform
       let _total_donated = user.total_donated + usd_donation_amount;
 
-      // mark the reciept as claimed now
+      // mark the receipt as claimed now
       let now_ = new Date();
-      reciept.claimed = true;
-      reciept.save();
+      receipt.claimed = true;
+      receipt.save();
 
       // process the medals that the user unlocks
       let medals_earned = processMedals(user, usd_donation_amount);
@@ -314,22 +314,22 @@ export const resolvers = {
       );
       console.log(`THE API RETURNED ${result}`);
 
-      // create donation reciept
+      // create donation receipt
       if (result) {
         let now_ = new Date();
         let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
-        let reciept_ = new Reciept({
+        let receipt_ = new Receipt({
           npo_id: npo_info.npo_id,
           user_id: user_id,
           amount: donation_amount,
           date_time: now_,
           claimed: false,
         });
-        let donation_reciept = await reciept_.save();
+        let donation_receipt = await receipt_.save();
 
         return {
           success: true,
-          reciept_id: donation_reciept._id,
+          receipt_id: donation_receipt._id,
         };
       }
 
