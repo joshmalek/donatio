@@ -26,7 +26,7 @@ const dailyNonprofitSelection = new cron.CronJob('59 16 * * *', () => {
 })
 
 //tweet every day at 5pm how much was donated to the nonprofit of the day
-const dailyDonationTweet = new cron.CronJob('3 12 * * *', () => {
+const dailyDonationTweet = new cron.CronJob('0 17 * * *', () => {
 
   var Twitter = require('twitter');
   var client = new Twitter({

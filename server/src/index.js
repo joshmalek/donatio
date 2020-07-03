@@ -30,7 +30,7 @@ const startServer = async () => {
   });
 
   // Start the cron jobs
-  dailyDonationTweet.start();
+  //dailyDonationTweet.start();
 
 };
 
