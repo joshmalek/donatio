@@ -18,6 +18,7 @@ export const typeDefs = gql`
       tweet: String!
     ): Boolean
     requestAmazonCreds(access_token: String!): AmazonUserData
+    checkConfirmation(confirmation_key: String!): User
   }
 
   type Mutation {

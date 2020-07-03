@@ -208,6 +208,10 @@ export const resolvers = {
       // default return
       return response;
     },
+    checkConfirmation: async (_, { confirmation_key }) => {
+      let user = await User.findOne({ confirmation_string: confirmation_key });
+      return user;
+    },
   },
 
   Mutation: {
