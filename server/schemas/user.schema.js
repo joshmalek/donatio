@@ -11,6 +11,7 @@ var UserSchema = new Schema({
   medals: [Medal.schema],
   total_donated: Number,
   email_confirmed: Boolean,
+  confirmation_string: String,
 });
 
 const User = mongoose.model("User", UserSchema);
