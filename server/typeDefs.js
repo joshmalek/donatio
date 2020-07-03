@@ -37,6 +37,7 @@ export const typeDefs = gql`
       user_id: String!
     ): AmazonPayResponse
     initiateEmailConfirmation(user_id: String!): Boolean
+    setEmailConfirmed(user_id: String!): Boolean
   }
 
   type AmazonUserData {

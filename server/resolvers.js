@@ -215,6 +215,16 @@ export const resolvers = {
   },
 
   Mutation: {
+    setEmailConfirmed: async (_, { user_id }) => {
+      let user = await User.findById(user_id);
+      if (!user) return false;
+
+      user.email_confirmed = true;
+      user.confirmation_string = undefined;
+      user.save();
+
+      return true;
+    },
     addNonprofit: async (
       _,
       { vendor_id, vendor_organization_reference, name }
