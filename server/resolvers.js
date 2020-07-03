@@ -86,6 +86,10 @@ export const resolvers = {
         oauth_token_secret: auth_response.oauth_token_secret,
       };
     },
+    receipts: async () => {
+      const receipts = await Receipt.find();
+      return receipts;
+    },
     weekReceipts: async (_, { user_id }) => {
       let week_start = new Date();
       week_start.setDate(week_start.getDate() - week_start.getDay());

@@ -4,7 +4,9 @@ import mongoose from "mongoose";
 import { typeDefs } from "../typeDefs";
 import { resolvers } from "../resolvers";
 import dotenv from "dotenv";
-import { dailyNonprofitSelection } from "../cron_jobs/NonprofitSelection.cron";
+import { dailyNonprofitSelection, dailyDonationTweet } from "../cron_jobs/NonprofitSelection.cron";
+import axios from "axios";
+import { parse } from "qs";
 
 dotenv.config();
 
@@ -28,7 +30,8 @@ const startServer = async () => {
   });
 
   // Start the cron jobs
-  // dailyNonprofitSelection.start();
+  dailyDonationTweet.start();
+
 };
 
 startServer();

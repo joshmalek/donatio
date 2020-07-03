@@ -8,6 +8,7 @@ export const typeDefs = gql`
     nonprofits: [Nonprofit]
     NPOofDay: Nonprofit
     medals: [Medal]
+    receipts: [Receipt]
     weekReceipts(user_id: String!): [Receipt]
     initiateTwitterAuth: TwitterAuthResponse
     processTwitterAuth(oauth_token: String!, oauth_verifier: String!): Boolean
@@ -57,7 +58,7 @@ export const typeDefs = gql`
     npo_id: ID!
     user_id: ID!
     amount: Float!
-    iso_dateTime: String
+    date_time: String
     claimed: Boolean
   }
 
