@@ -359,7 +359,7 @@ export const resolvers = {
 
       transporter.sendMail(
         {
-          from: "no-reply@donatio.com",
+          from: "no-reply@donatio.com", // process.env.GMAIL_USERNAME,
           to: user.email,
           subject: "Donatio: Confirmation Email",
           text: `Hello ${user.firstName} ${user.lastName}, 
