@@ -208,9 +208,33 @@ export const resolvers = {
       // default return
       return response;
     },
+    checkConfirmation: async (_, { confirmation_key }) => {
+      let user = await User.findOne({ confirmation_string: confirmation_key });
+      return user;
+    },
   },
 
   Mutation: {
+    setUserPassword: async (_, { user_id, password }) => {
+      let user = await User.findById(user_id);
+      if (!user) return false;
+
+      user.password = password;
+      // TODO encrypt password!!!
+      user.save();
+
+      return true;
+    },
+    setEmailConfirmed: async (_, { user_id }) => {
+      let user = await User.findById(user_id);
+      if (!user) return false;
+
+      user.email_confirmed = true;
+      user.confirmation_string = undefined;
+      user.save();
+
+      return true;
+    },
     addNonprofit: async (
       _,
       { vendor_id, vendor_organization_reference, name }

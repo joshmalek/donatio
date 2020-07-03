@@ -18,6 +18,7 @@ export const typeDefs = gql`
       tweet: String!
     ): Boolean
     requestAmazonCreds(access_token: String!): AmazonUserData
+    checkConfirmation(confirmation_key: String!): User
   }
 
   type Mutation {
@@ -36,6 +37,8 @@ export const typeDefs = gql`
       user_id: String!
     ): AmazonPayResponse
     initiateEmailConfirmation(user_id: String!): Boolean
+    setEmailConfirmed(user_id: String!): Boolean
+    setUserPassword(user_id: String!, password: String!): Boolean
   }
 
   type AmazonUserData {
@@ -80,6 +83,7 @@ export const typeDefs = gql`
     _id: ID!
     email_confirmed: Boolean
     confirmation_string: String
+    password: String
   }
 
   type Medal {
