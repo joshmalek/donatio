@@ -1,13 +1,7 @@
 import cron from 'cron'
 import axios from 'axios'
-import twitter from 'twitter'
 
-var client = new Twitter({
-  consumer_key: process.env.DONATIO_CONSUMER_KEY,
-  consumer_secret: process.env.DONATIO_CONSUMER_SECRET,
-  access_token_key: process.env.DONATIO_ACCESS_TOKEN,
-  access_token_secret: process.env.DONATIO_ACCESS_TOKEN_SECRET
-});
+
 
 //run everyday at 4:59 pm
 const dailyNonprofitSelection = new cron.CronJob('59 16 * * *', () => {
@@ -33,6 +27,15 @@ const dailyNonprofitSelection = new cron.CronJob('59 16 * * *', () => {
 
 //tweet every day at 5pm how much was donated to the nonprofit of the day
 const dailyDonationTweet = new cron.CronJob('0 17 * * *', () => {
+
+  var Twitter = require('twitter');
+  var client = new Twitter({
+    consumer_key: process.env.DONATIO_CONSUMER_KEY,
+    consumer_secret: process.env.DONATIO_CONSUMER_SECRET,
+    access_token_key: process.env.DONATIO_ACCESS_TOKEN,
+    access_token_secret: process.env.DONATIO_ACCESS_TOKEN_SECRET
+  });
+
   console.log("Tweeting our daily donation totals\n");
 
   //change this to retrieve npo of day, new npo, and
@@ -50,5 +53,15 @@ const dailyDonationTweet = new cron.CronJob('0 17 * * *', () => {
       console.log('Error fetching nonprofits...')
       console.log(err)
     })
+
+
+  client.post('statuses/update', { status: 'I am a tweet' }, function (error, tweet, response) {
+    if (!error) {
+      console.log(tweet);
+    }
+  });
+
+
+
 })
 export { dailyNonprofitSelection }
