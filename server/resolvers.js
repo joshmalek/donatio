@@ -59,16 +59,13 @@ export const resolvers = {
       return users;
     },
     nonprofits: async () => {
-      const nonprofits = await Nonprofit.find({
-        _id: { $ne: "5efa4e0f83d4c7657784589a" },
-      });
+      const nonprofits = await Nonprofit.find();
       return nonprofits;
     },
     NPOofDay: async () => {
       // npo of the day is stored in document with id: 5efa4e0f83d4c7657784589a
-      let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
-      let selected_nonprofit = await Nonprofit.findById(npo_info.npo_id);
-      return selected_nonprofit.toObject();
+      let npo_of_day = await Nonprofit.find({ is_NPOofDay: true });
+      return npo_of_day[0].toObject();
     },
     medals: async () => {
       return MedalAPI.getMedals();
@@ -253,27 +250,27 @@ export const resolvers = {
       let result = await new_nonprofit.save();
       return result.toObject();
     },
-    updateNonprofitPriority: async (_, { _id }) => {
+    updateNonprofitTotal: async (_, { _id, sum_donated }) => {
       let nonprofit = await Nonprofit.findById(_id);
-      nonprofit.priority = nonprofit.priority + 1;
+      if (nonprofit.total == null) {
+        nonprofit.total = sum_donated;
+      }
+      else {
+        nonprofit.total = nonprofit.total + sum_donated;
+      }
       nonprofit = await nonprofit.save();
       return nonprofit.toObject();
     },
-    setNPOofDay: async (_, { _id }) => {
-      let new_npoOfDay = await Nonprofit.findById(_id);
-      if (!new_npoOfDay) return null;
+    setNPOofDay: async (_, { old_npo_id, new_npo_id }) => {
+      let new_npoOfDay = await Nonprofit.findById(new_npo_id);
+      let old_npoOfDay = await Nonprofit.findById(old_npo_id);
 
-      let npo_info = await Nonprofit.findById("5efa4e0f83d4c7657784589a");
-      npo_info.npo_id = _id;
-      npo_info = await npo_info.save();
-
-      // update the priority of the npo of day
-      new_npoOfDay.priority = new_npoOfDay.priority + 1;
+      old_npoOfDay.is_NPOofDay = false;
+      new_npoOfDay.is_NPOofDay = true;
+      old_npoOfDay = await old_npoOfDay.save();
       new_npoOfDay = await new_npoOfDay.save();
-
       return new_npoOfDay.toObject();
     },
-
     processDonation: async (_, { receipt_id }) => {
       // 1. Find the receipt that.
       console.log("Processing Donation");
