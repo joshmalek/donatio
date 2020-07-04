@@ -17,7 +17,7 @@ const getReceipts = async () => {
 const getNPOofDay = async () => {
   return new Promise((resolve, reject) => {
     axios
-      .get("http://localhost:4000/graphql?query={NPOofDay{name,vendor_id}}")
+      .get("http://localhost:4000/graphql?query={NPOofDay{name,_id}}")
       .then((res) => {
         resolve(res.data.data.NPOofDay);
       })
@@ -30,7 +30,7 @@ const getNPOofDay = async () => {
 const getAllNPOs = async () => {
   return new Promise((resolve, reject) => {
     axios
-      .get("http://localhost:4000/graphql?query={nonprofits{name,vendor_id,amount}}")
+      .get("http://localhost:4000/graphql?query={nonprofits{name,_id,total}}")
       .then((res) => {
         resolve(res.data.data.nonprofits);
       })
@@ -41,12 +41,14 @@ const getAllNPOs = async () => {
 };
 
 
-const updateNPOTotal = async () => {
+const updateNPOTotal = async (_id, day_sum) => {
   return new Promise((resolve, reject) => {
     axios
-      .post("http://localhost:4000/graphql?query={nonprofits{name,vendor_id,amount}}")
+      .post("http://localhost:4000/graphql", {
+        query: `mutation {updateNonprofitTotal(_id: ${_id},sum_donated: ${day_sum}) {name,total}}`
+      })
       .then((res) => {
-        resolve(res.data.data.nonprofits);
+        resolve(res.data.data.updateNonprofitTotal.total);
       })
       .catch((err) => {
         resolve(null);
@@ -60,7 +62,8 @@ const updateNPOTotal = async () => {
 
 var previous_npo = null;
 //run everyday at 4:59 pm
-const dailyNonprofitSelection = new cron.CronJob("59 16 * * *", async () => {
+const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
+  console.log("running npo selection");
   let previous_npo = await getNPO();
   let todays_receipts = await getReceipts();
 
@@ -85,9 +88,23 @@ const dailyNonprofitSelection = new cron.CronJob("59 16 * * *", async () => {
   console.log("Amount to be added to total nonprofit givings: " + total_donations_today);
   console.log("Will add " + total_donations_today + " to " + previous_npo.name + " id " + previous_npo.vendor_id);
   //update NPOofDay amount
-
+  let response = await updateNPOTotal(previous_npo._id, total_donations_today);
+  console.log(response);
   let nonprofits = await getAllNPOs();
+  var npo_list = [];
+  for (var i = 0; i < nonprofits.length; i++) {
+    if (nonprofits[i].total == null) {
+      let res = await updateNPOTotal(nonprofits[i]._id, 0.00);
+      console.log("npo had no total, set to 0\n");
+      sorted_npo_list.push([0.00, nonprofits[i]._id]);
+    }
+    else {
+      sorted_npo_list.push([nonprofits[i].total, nonprofits[i]._id]);
+    }
+  }
   //pull all NPOs and sort by lowest
+  var sorted_npo_list = npo_list.sort(function (a, b) { return a[0] - b[0]; });
+  console.log("lowest value npo was found to be " + sorted_npo_list[0]);
   //change npo of day to be lowest 
   //finish
 

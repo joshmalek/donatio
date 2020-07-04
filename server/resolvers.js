@@ -255,7 +255,12 @@ export const resolvers = {
     },
     updateNonprofitTotal: async (_, { _id, sum_donated }) => {
       let nonprofit = await Nonprofit.findById(_id);
-      nonprofit.total = nonprofit.total + sum_donated;
+      if (nonprofit.total == null) {
+        nonprofit.total = sum_donated;
+      }
+      else {
+        nonprofit.total = nonprofit.total + sum_donated;
+      }
       nonprofit = await nonprofit.save();
       return nonprofit.toObject();
     },
