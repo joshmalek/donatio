@@ -73,9 +73,17 @@ const updateNPOofDay = async (old_id, new_id) => {
 };
 
 
-var previous_npo = null;
+
 //run everyday at 4:59 pm
-const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
+const dailyNonprofitSelection = new cron.CronJob("0 17 * * *", async () => {
+  var Twitter = require("twitter");
+  var client = new Twitter({
+    consumer_key: process.env.DONATIO_CONSUMER_KEY,
+    consumer_secret: process.env.DONATIO_CONSUMER_SECRET,
+    access_token_key: process.env.DONATIO_ACCESS_TOKEN,
+    access_token_secret: process.env.DONATIO_ACCESS_TOKEN_SECRET,
+  });
+
   console.log("running npo selection\n");
 
   let previous_npo = await getNPOofDay();
@@ -114,7 +122,7 @@ const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
   }
   //pull all NPOs and sort by lowest
   var sorted_npo_list = npo_list.sort(function (a, b) { return a[0] - b[0]; });
-  console.log(sorted_npo_list)
+  //console.log(sorted_npo_list)
   console.log("lowest value npo was found to be " + sorted_npo_list[0][2] + ", setting to npoOfDay");
   //change npo of day to be lowest 
   let update_response = await updateNPOofDay(previous_npo._id, sorted_npo_list[0][1])
@@ -145,5 +153,4 @@ const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
 });
 
 
-
-export { dailyNonprofitSelection, dailyDonationTweet };
+export { dailyNonprofitSelection };
