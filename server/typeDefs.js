@@ -29,7 +29,7 @@ export const typeDefs = gql`
       name: String
     ): Nonprofit
     updateNonprofitTotal(_id: String!,sum_donated: Float!): Nonprofit
-    setNPOofDay(previous_npo_id: String!,new_npo_id: String!): Nonprofit
+    setNPOofDay(old_npo_id: String!,new_npo_id: String!): Nonprofit
     processDonation(receipt_id: String!): DonationReward
     processAmazonPay(
       donation_amount: Float!

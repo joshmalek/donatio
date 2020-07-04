@@ -48,7 +48,7 @@ const updateNPOTotal = async (_id, day_sum) => {
         query: `mutation {updateNonprofitTotal(_id: "${_id}",sum_donated: ${day_sum}) {name,total}}`
       })
       .then((res) => {
-        resolve(res.data.datax.updateNonprofitTotal);
+        resolve(res.data.data.updateNonprofitTotal);
       })
       .catch((err) => {
         console.log(err);
@@ -60,7 +60,7 @@ const updateNPOofDay = async (old_id, new_id) => {
   return new Promise((resolve, reject) => {
     axios
       .post("http://localhost:4000/graphql", {
-        query: `mutation {setNPOofDay(previous_npo_id: "${old_id}",new_npo_id: "${new_id}") {name,total}}`
+        query: `mutation {setNPOofDay(old_npo_id: "${old_id}",new_npo_id: "${new_id}") {name,total}}`
       })
       .then((res) => {
         resolve(res.data.data.setNPOofDay);
@@ -111,9 +111,9 @@ const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
   //pull all NPOs and sort by lowest
   var sorted_npo_list = npo_list.sort(function (a, b) { return a[0] - b[0]; });
   console.log(sorted_npo_list)
-  console.log("lowest value npo was found to be " + sorted_npo_list[0]);
+  console.log("lowest value npo was found to be " + sorted_npo_list[0] + ", setting to npoOfDay");
   //change npo of day to be lowest 
-  let response = await updateNPOofDay(previous_npo._id, sorted_npo_list[0][1])
+  let update_response = await updateNPOofDay(previous_npo._id, sorted_npo_list[0][1])
   console.log("set npo of day successfully");
   //finish
 

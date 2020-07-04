@@ -64,8 +64,8 @@ export const resolvers = {
     },
     NPOofDay: async () => {
       // npo of the day is stored in document with id: 5efa4e0f83d4c7657784589a
-      let npo_of_day = await Nonprofit.findById({ is_NPOofDay: { $e: true } });
-      return npo_of_day.toObject();
+      let npo_of_day = await Nonprofit.find({ is_NPOofDay: true });
+      return npo_of_day[0].toObject();
     },
     medals: async () => {
       return MedalAPI.getMedals();
@@ -261,11 +261,9 @@ export const resolvers = {
       nonprofit = await nonprofit.save();
       return nonprofit.toObject();
     },
-    setNPOofDay: async (_, { previous_npo_id, new_npo_id }) => {
+    setNPOofDay: async (_, { old_npo_id, new_npo_id }) => {
       let new_npoOfDay = await Nonprofit.findById(new_npo_id);
-      if (!new_npoOfDay) return null;
-      let previous_npoOfDay = await Nonprofit.findById(previous_npo_id);
-      if (!previous_npoOfDay) return null;
+      let old_npoOfDay = await Nonprofit.findById(old_npo_id);
 
       old_npoOfDay.is_NPOofDay = false;
       new_npoOfDay.is_NPOofDay = true;
