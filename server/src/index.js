@@ -31,7 +31,8 @@ const startServer = async () => {
 
   // Start the cron jobs
   //dailyDonationTweet.start();
-
+  console.log("started cron jobs")
+  dailyNonprofitSelection.start();
 };
 
 startServer();

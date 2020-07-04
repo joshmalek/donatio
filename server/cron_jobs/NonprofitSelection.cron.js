@@ -45,27 +45,25 @@ const updateNPOTotal = async (_id, day_sum) => {
   return new Promise((resolve, reject) => {
     axios
       .post("http://localhost:4000/graphql", {
-        query: `mutation {updateNonprofitTotal(_id: ${_id},sum_donated: ${day_sum}) {name,total}}`
+        query: `mutation {updateNonprofitTotal(_id: "${_id}",sum_donated: ${day_sum}) {name,total}}`
       })
       .then((res) => {
-        resolve(res.data.data.updateNonprofitTotal.total);
+        resolve(res.data.data);
       })
       .catch((err) => {
+        console.log(err);
         resolve(null);
       });
   });
 };
 
 
-
-
-
 var previous_npo = null;
 //run everyday at 4:59 pm
 const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
-  console.log("running npo selection");
-  let previous_npo = await getNPO();
-  let todays_receipts = await getReceipts();
+  console.log("running npo selection\n");
+  let previous_npo = await getNPOofDay();
+  let receipts = await getReceipts();
 
 
   var today = new Date();
@@ -86,24 +84,18 @@ const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
     }
   }
   console.log("Amount to be added to total nonprofit givings: " + total_donations_today);
-  console.log("Will add " + total_donations_today + " to " + previous_npo.name + " id " + previous_npo.vendor_id);
+  console.log("Will add " + total_donations_today + " to " + previous_npo.name + " id " + previous_npo._id);
   //update NPOofDay amount
   let response = await updateNPOTotal(previous_npo._id, total_donations_today);
   console.log(response);
   let nonprofits = await getAllNPOs();
   var npo_list = [];
   for (var i = 0; i < nonprofits.length; i++) {
-    if (nonprofits[i].total == null) {
-      let res = await updateNPOTotal(nonprofits[i]._id, 0.00);
-      console.log("npo had no total, set to 0\n");
-      sorted_npo_list.push([0.00, nonprofits[i]._id]);
-    }
-    else {
-      sorted_npo_list.push([nonprofits[i].total, nonprofits[i]._id]);
-    }
+    npo_list.push([nonprofits[i].total, nonprofits[i]._id, nonprofits[i].name]);
   }
   //pull all NPOs and sort by lowest
   var sorted_npo_list = npo_list.sort(function (a, b) { return a[0] - b[0]; });
+  console.log(sorted_npo_list)
   console.log("lowest value npo was found to be " + sorted_npo_list[0]);
   //change npo of day to be lowest 
   //finish
