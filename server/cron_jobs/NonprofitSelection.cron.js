@@ -131,33 +131,27 @@ const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
   console.log("Tweeting our daily donation totals\n");
 
   //tweet structure
-  console.log("Today DonatIO users donated $" +
-    total_donations_today +
-    " to " +
-    previous_npo.at +
-    "!  Thank you to everyone who donated. Our new nonprofit will be " +
-    sorted_npo_list[0][3] +
-    ".  Let's help them out!")
-  // client.post(
-  //   "statuses/update",
-  //   {
-  //     status:
-  //       "Today DonatIO users donated $" +
-  //       total_donations_today +
-  //       " to " +
-  //       previous_npo.at +
-  //       "!  Thank you to everyone who donated. Our new nonprofit will be " +
-  //       sorted_npo_list[0][3] +
-  //       ".  Let's help them out!",
-  //   },
-  //   function (error, tweet, response) {
-  //     if (!error) {
-  //       console.log("Tweet successfully posted\n");
-  //     } else {
-  //       console.log(error);
-  //     }
-  //   }
-  // );
+
+  client.post(
+    "statuses/update",
+    {
+      status:
+        "Today DonatIO users donated $" +
+        total_donations_today +
+        " to " +
+        previous_npo.at +
+        "!  Thank you to everyone who donated. Our new #NonprofitOfTheDay will be " +
+        sorted_npo_list[0][3] +
+        ".  Let's help them out!",
+    },
+    function (error, tweet, response) {
+      if (!error) {
+        console.log("Tweet successfully posted\n");
+      } else {
+        console.log(error);
+      }
+    }
+  );
 });
 
 
