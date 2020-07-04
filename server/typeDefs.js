@@ -28,8 +28,9 @@ export const typeDefs = gql`
       vendor_organization_reference: String
       name: String
     ): Nonprofit
-    updateNonprofitTotal(_id: String!,sum_donated: Float!): Nonprofit
-    setNPOofDay(old_npo_id: String!,new_npo_id: String!): Nonprofit
+    login(email: String!, password: String!): Boolean
+    updateNonprofitTotal(_id: String!, sum_donated: Float!): Nonprofit
+    setNPOofDay(old_npo_id: String!, new_npo_id: String!): Nonprofit
     processDonation(receipt_id: String!): DonationReward
     processAmazonPay(
       donation_amount: Float!
@@ -107,5 +108,4 @@ export const typeDefs = gql`
     at: String!
     _id: ID!
   }
-
 `;

@@ -5,6 +5,7 @@ import qs from "qs";
 import randomstring from "randomstring";
 import sendmail from "sendmail";
 import nodemailer from "nodemailer";
+import bcrypt from "bcrypt";
 
 import Receipt from "./schemas/receipt.schema";
 import Medal from "./schemas/medal.schema";
@@ -216,12 +217,25 @@ export const resolvers = {
   },
 
   Mutation: {
+    login: async (_, { email, password }) => {
+      let user_ = await User.findOne({ email: email });
+      if (!user_) return false;
+
+      // compare the password
+      let passswordMatch = await comparePasswords(password, user_.password);
+      return passswordMatch;
+    },
     setUserPassword: async (_, { user_id, password }) => {
       let user = await User.findById(user_id);
       if (!user) return false;
 
-      user.password = password;
-      // TODO encrypt password!!!
+      bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(password, salt, function (err, hash) {
+          // hashing password
+          user.password = hash;
+          user.save();
+        });
+      });
       user.save();
 
       return true;
@@ -254,8 +268,7 @@ export const resolvers = {
       let nonprofit = await Nonprofit.findById(_id);
       if (nonprofit.total == null) {
         nonprofit.total = sum_donated;
-      }
-      else {
+      } else {
         nonprofit.total = nonprofit.total + sum_donated;
       }
       nonprofit = await nonprofit.save();
@@ -439,4 +452,13 @@ const pad = (d, amount) => {
 
 const calculateExperienceGained = (donation_amount) => {
   return 10 * donation_amount;
+};
+
+const comparePasswords = async (unhashedPass, hashedPass) => {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(unhashedPass, hashedPass, function (err, result) {
+      // result == true
+      resolve(result);
+    });
+  });
 };
