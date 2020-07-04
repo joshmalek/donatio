@@ -59,6 +59,14 @@ export const resolvers = {
       const users = await User.find();
       return users;
     },
+    login: async (_, { email, password }) => {
+      let user_ = await User.findOne({ email: email });
+      if (!user_) return false;
+
+      // compare the password
+      let passswordMatch = await comparePasswords(password, user_.password);
+      return passswordMatch;
+    },
     nonprofits: async () => {
       const nonprofits = await Nonprofit.find();
       return nonprofits;
@@ -444,4 +452,13 @@ const pad = (d, amount) => {
 
 const calculateExperienceGained = (donation_amount) => {
   return 10 * donation_amount;
+};
+
+const comparePasswords = async (unhashedPass, hashedPass) => {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(unhashedPass, hashedPass, function (err, result) {
+      // result == true
+      resolve(result);
+    });
+  });
 };

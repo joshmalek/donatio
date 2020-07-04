@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express";
 export const typeDefs = gql`
   type Query {
     user(_id: String!): User
+    login(email: String!, password: String!): Boolean
     userLockedMedals(_id: String!): [Medal]
     users: [User]
     nonprofits: [Nonprofit]
@@ -28,8 +29,8 @@ export const typeDefs = gql`
       vendor_organization_reference: String
       name: String
     ): Nonprofit
-    updateNonprofitTotal(_id: String!,sum_donated: Float!): Nonprofit
-    setNPOofDay(old_npo_id: String!,new_npo_id: String!): Nonprofit
+    updateNonprofitTotal(_id: String!, sum_donated: Float!): Nonprofit
+    setNPOofDay(old_npo_id: String!, new_npo_id: String!): Nonprofit
     processDonation(receipt_id: String!): DonationReward
     processAmazonPay(
       donation_amount: Float!
@@ -107,5 +108,4 @@ export const typeDefs = gql`
     at: String!
     _id: ID!
   }
-
 `;
