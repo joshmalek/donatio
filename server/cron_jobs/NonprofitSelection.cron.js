@@ -48,7 +48,22 @@ const updateNPOTotal = async (_id, day_sum) => {
         query: `mutation {updateNonprofitTotal(_id: "${_id}",sum_donated: ${day_sum}) {name,total}}`
       })
       .then((res) => {
-        resolve(res.data.data);
+        resolve(res.data.datax.updateNonprofitTotal);
+      })
+      .catch((err) => {
+        console.log(err);
+        resolve(null);
+      });
+  });
+};
+const updateNPOofDay = async (old_id, new_id) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post("http://localhost:4000/graphql", {
+        query: `mutation {setNPOofDay(previous_npo_id: "${old_id}",new_npo_id: "${new_id}") {name,total}}`
+      })
+      .then((res) => {
+        resolve(res.data.data.setNPOofDay);
       })
       .catch((err) => {
         console.log(err);
@@ -98,6 +113,8 @@ const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
   console.log(sorted_npo_list)
   console.log("lowest value npo was found to be " + sorted_npo_list[0]);
   //change npo of day to be lowest 
+  let response = await updateNPOofDay(previous_npo._id, sorted_npo_list[0][1])
+  console.log("set npo of day successfully");
   //finish
 
 });

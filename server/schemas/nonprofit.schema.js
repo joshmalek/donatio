@@ -7,7 +7,8 @@ var NonprofitSchema = new Schema({
   vendor_organization_reference: String,
   name: String,
   npo_id: Schema.Types.ObjectId,
-  total: Number
+  total: Number,
+  is_NPOofDay: Boolean
 })
 
 const Nonprofit = mongoose.model('Nonprofit', NonprofitSchema)
