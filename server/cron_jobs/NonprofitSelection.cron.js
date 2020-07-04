@@ -41,6 +41,22 @@ const getAllNPOs = async () => {
 };
 
 
+const updateNPOTotal = async () => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post("http://localhost:4000/graphql?query={nonprofits{name,vendor_id,amount}}")
+      .then((res) => {
+        resolve(res.data.data.nonprofits);
+      })
+      .catch((err) => {
+        resolve(null);
+      });
+  });
+};
+
+
+
+
 
 var previous_npo = null;
 //run everyday at 4:59 pm
@@ -69,6 +85,7 @@ const dailyNonprofitSelection = new cron.CronJob("59 16 * * *", async () => {
   console.log("Amount to be added to total nonprofit givings: " + total_donations_today);
   console.log("Will add " + total_donations_today + " to " + previous_npo.name + " id " + previous_npo.vendor_id);
   //update NPOofDay amount
+
   let nonprofits = await getAllNPOs();
   //pull all NPOs and sort by lowest
   //change npo of day to be lowest 

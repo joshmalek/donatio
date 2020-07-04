@@ -28,7 +28,7 @@ export const typeDefs = gql`
       vendor_organization_reference: String
       name: String
     ): Nonprofit
-    updateNonprofitPriority(_id: String!): Nonprofit
+    updateNonprofitTotal(_id: String!,sum_donated: Float!): Nonprofit
     setNPOofDay(_id: String!): Nonprofit
     processDonation(receipt_id: String!): DonationReward
     processAmazonPay(
@@ -102,7 +102,7 @@ export const typeDefs = gql`
     vendor_organization_reference: String!
     name: String!
     priority: Int!
-    amount: Float!
+    total: Float!
     _id: ID!
   }
 

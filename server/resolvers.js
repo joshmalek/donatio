@@ -253,9 +253,9 @@ export const resolvers = {
       let result = await new_nonprofit.save();
       return result.toObject();
     },
-    updateNonprofitPriority: async (_, { _id }) => {
+    updateNonprofitTotal: async (_, { _id, sum_donated }) => {
       let nonprofit = await Nonprofit.findById(_id);
-      nonprofit.priority = nonprofit.priority + 1;
+      nonprofit.total = nonprofit.total + sum_donated;
       nonprofit = await nonprofit.save();
       return nonprofit.toObject();
     },
