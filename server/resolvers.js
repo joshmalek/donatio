@@ -5,6 +5,7 @@ import qs from "qs";
 import randomstring from "randomstring";
 import sendmail from "sendmail";
 import nodemailer from "nodemailer";
+import bcrypt from "bcrypt";
 
 import Receipt from "./schemas/receipt.schema";
 import Medal from "./schemas/medal.schema";
@@ -220,8 +221,13 @@ export const resolvers = {
       let user = await User.findById(user_id);
       if (!user) return false;
 
-      user.password = password;
-      // TODO encrypt password!!!
+      bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(password, salt, function (err, hash) {
+          // hashing password
+          user.password = hash;
+          user.save();
+        });
+      });
       user.save();
 
       return true;
@@ -254,8 +260,7 @@ export const resolvers = {
       let nonprofit = await Nonprofit.findById(_id);
       if (nonprofit.total == null) {
         nonprofit.total = sum_donated;
-      }
-      else {
+      } else {
         nonprofit.total = nonprofit.total + sum_donated;
       }
       nonprofit = await nonprofit.save();
