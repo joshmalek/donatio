@@ -14,12 +14,25 @@ const getReceipts = async () => {
   });
 };
 
-const getNPO = async () => {
+const getNPOofDay = async () => {
   return new Promise((resolve, reject) => {
     axios
-      .get("http://localhost:4000/graphql?query={NPOofDay{name}}")
+      .get("http://localhost:4000/graphql?query={NPOofDay{name,vendor_id}}")
       .then((res) => {
-        resolve(res.data.data.NPOofDay.name);
+        resolve(res.data.data.NPOofDay);
+      })
+      .catch((err) => {
+        resolve(null);
+      });
+  });
+};
+
+const getAllNPOs = async () => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get("http://localhost:4000/graphql?query={nonprofits{name,vendor_id,amount}}")
+      .then((res) => {
+        resolve(res.data.data.nonprofits);
       })
       .catch((err) => {
         resolve(null);
@@ -28,15 +41,38 @@ const getNPO = async () => {
 };
 
 
+
 var previous_npo = null;
 //run everyday at 4:59 pm
-const dailyNonprofitSelection = new cron.CronJob("59 16 * * *", () => {
+const dailyNonprofitSelection = new cron.CronJob("59 16 * * *", async () => {
   let previous_npo = await getNPO();
   let todays_receipts = await getReceipts();
 
 
-
-
+  var today = new Date();
+  var yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  //Date.parse converts to int format
+  today.toDateString();
+  today = Date.parse(today);
+  yesterday.toDateString();
+  yesterday = Date.parse(yesterday);
+  var total_donations_today = 0;
+  for (var i = 0; i < receipts.length; i++) {
+    var parsed_date = Date.parse(receipts[i].date_time);
+    //for each receipt, see if it falls between today and yesterday at the time the cron job is run (5pm)
+    if (parsed_date > yesterday && parsed_date < today) {
+      console.log(receipts[i].date_time + " " + receipts[i].amount);
+      total_donations_today += receipts[i].amount;
+    }
+  }
+  console.log("Amount to be added to total nonprofit givings: " + total_donations_today);
+  console.log("Will add " + total_donations_today + " to " + previous_npo.name + " id " + previous_npo.vendor_id);
+  //update NPOofDay amount
+  let nonprofits = await getAllNPOs();
+  //pull all NPOs and sort by lowest
+  //change npo of day to be lowest 
+  //finish
 
 });
 
