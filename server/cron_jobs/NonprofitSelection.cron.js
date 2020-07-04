@@ -1,31 +1,7 @@
 import cron from "cron";
 import axios from "axios";
 
-//run everyday at 4:59 pm
-const dailyNonprofitSelection = new cron.CronJob("59 16 * * *", () => {
-  console.log(`\nDailyNonprofitSelection Cron Job Running`);
-  let start_time = new Date();
-  console.log(
-    `${
-    start_time.getMonth() + 1
-    }/${start_time.getDay()}/${start_time.getFullYear()}`
-  );
-  var url = "http://localhost:4000/graphql";
-  axios
-    .post(url, {
-      query: "{ nonprofits { name, priority, id } }",
-    })
-    .then((res) => {
-      let nonprofits = res.data.data.nonprofits;
-      // let
-    })
-    .catch((err) => {
-      console.log(`Error fetching nonprofits...`);
-      console.log(err);
-    });
-});
-
-const getReceipt = async () => {
+const getReceipts = async () => {
   return new Promise((resolve, reject) => {
     axios
       .get("http://localhost:4000/graphql?query={receipts{amount,date_time}}")
@@ -51,6 +27,21 @@ const getNPO = async () => {
   });
 };
 
+
+var previous_npo = null;
+//run everyday at 4:59 pm
+const dailyNonprofitSelection = new cron.CronJob("59 16 * * *", () => {
+  let previous_npo = await getNPO();
+  let todays_receipts = await getReceipts();
+
+
+
+
+
+});
+
+
+
 //tweet every day at 5pm how much was donated to the nonprofit of the day
 const dailyDonationTweet = new cron.CronJob("0 17 * * *", async () => {
   var Twitter = require("twitter");
@@ -63,7 +54,7 @@ const dailyDonationTweet = new cron.CronJob("0 17 * * *", async () => {
 
   console.log("Tweeting our daily donation totals\n");
 
-  let receipts = await getReceipt();
+  let receipts = await getReceipts();
   let npo = await getNPO();
 
   var today = new Date();
