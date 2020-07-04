@@ -104,6 +104,7 @@ export const typeDefs = gql`
     priority: Int!
     total: Float!
     is_NPOofDay: Boolean!
+    at: String!
     _id: ID!
   }
 

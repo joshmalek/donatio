@@ -17,7 +17,7 @@ const getReceipts = async () => {
 const getNPOofDay = async () => {
   return new Promise((resolve, reject) => {
     axios
-      .get("http://localhost:4000/graphql?query={NPOofDay{name,_id}}")
+      .get("http://localhost:4000/graphql?query={NPOofDay{name,_id,at}}")
       .then((res) => {
         resolve(res.data.data.NPOofDay);
       })
@@ -30,7 +30,7 @@ const getNPOofDay = async () => {
 const getAllNPOs = async () => {
   return new Promise((resolve, reject) => {
     axios
-      .get("http://localhost:4000/graphql?query={nonprofits{name,_id,total}}")
+      .get("http://localhost:4000/graphql?query={nonprofits{name,_id,total,at}}")
       .then((res) => {
         resolve(res.data.data.nonprofits);
       })
@@ -75,7 +75,7 @@ const updateNPOofDay = async (old_id, new_id) => {
 
 
 //run everyday at 4:59 pm
-const dailyNonprofitSelection = new cron.CronJob("0 17 * * *", async () => {
+const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
   var Twitter = require("twitter");
   var client = new Twitter({
     consumer_key: process.env.DONATIO_CONSUMER_KEY,
@@ -118,7 +118,7 @@ const dailyNonprofitSelection = new cron.CronJob("0 17 * * *", async () => {
   var npo_list = [];
   console.log("looking for least total donation NPO")
   for (var i = 0; i < nonprofits.length; i++) {
-    npo_list.push([nonprofits[i].total, nonprofits[i]._id, nonprofits[i].name]);
+    npo_list.push([nonprofits[i].total, nonprofits[i]._id, nonprofits[i].name, nonprofits[i].at]);
   }
   //pull all NPOs and sort by lowest
   var sorted_npo_list = npo_list.sort(function (a, b) { return a[0] - b[0]; });
@@ -129,27 +129,35 @@ const dailyNonprofitSelection = new cron.CronJob("0 17 * * *", async () => {
   console.log("set npo of day successfully");
   //finish
   console.log("Tweeting our daily donation totals\n");
+
   //tweet structure
-  client.post(
-    "statuses/update",
-    {
-      status:
-        "Today DonatIO users donated $" +
-        total_donations_today +
-        " to " +
-        previous_npo.name +
-        "!  Thank you to everyone who donated. Our new nonprofit will be " +
-        sorted_npo_list[0][2] +
-        ".  Let's help them out!",
-    },
-    function (error, tweet, response) {
-      if (!error) {
-        console.log("Tweet successfully posted\n");
-      } else {
-        console.log(error);
-      }
-    }
-  );
+  console.log("Today DonatIO users donated $" +
+    total_donations_today +
+    " to " +
+    previous_npo.at +
+    "!  Thank you to everyone who donated. Our new nonprofit will be " +
+    sorted_npo_list[0][3] +
+    ".  Let's help them out!")
+  // client.post(
+  //   "statuses/update",
+  //   {
+  //     status:
+  //       "Today DonatIO users donated $" +
+  //       total_donations_today +
+  //       " to " +
+  //       previous_npo.at +
+  //       "!  Thank you to everyone who donated. Our new nonprofit will be " +
+  //       sorted_npo_list[0][3] +
+  //       ".  Let's help them out!",
+  //   },
+  //   function (error, tweet, response) {
+  //     if (!error) {
+  //       console.log("Tweet successfully posted\n");
+  //     } else {
+  //       console.log(error);
+  //     }
+  //   }
+  // );
 });
 
 
