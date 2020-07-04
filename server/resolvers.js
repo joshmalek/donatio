@@ -59,14 +59,6 @@ export const resolvers = {
       const users = await User.find();
       return users;
     },
-    login: async (_, { email, password }) => {
-      let user_ = await User.findOne({ email: email });
-      if (!user_) return false;
-
-      // compare the password
-      let passswordMatch = await comparePasswords(password, user_.password);
-      return passswordMatch;
-    },
     nonprofits: async () => {
       const nonprofits = await Nonprofit.find();
       return nonprofits;
@@ -225,6 +217,14 @@ export const resolvers = {
   },
 
   Mutation: {
+    login: async (_, { email, password }) => {
+      let user_ = await User.findOne({ email: email });
+      if (!user_) return false;
+
+      // compare the password
+      let passswordMatch = await comparePasswords(password, user_.password);
+      return passswordMatch;
+    },
     setUserPassword: async (_, { user_id, password }) => {
       let user = await User.findById(user_id);
       if (!user) return false;
