@@ -75,7 +75,7 @@ const updateNPOofDay = async (old_id, new_id) => {
 
 
 //run everyday at 4:59 pm
-const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
+const dailyNonprofitSelection = new cron.CronJob("0 17 * * *", async () => {
   var Twitter = require("twitter");
   var client = new Twitter({
     consumer_key: process.env.DONATIO_CONSUMER_KEY,
