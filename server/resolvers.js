@@ -218,12 +218,14 @@ export const resolvers = {
 
   Mutation: {
     login: async (_, { email, password }) => {
+      console.log(`Login initiated`);
       let user_ = await User.findOne({ email: email });
-      if (!user_) return false;
+      if (!user_) return null;
 
       // compare the password
-      let passswordMatch = await comparePasswords(password, user_.password);
-      return passswordMatch;
+      let passwordMatch = await comparePasswords(password, user_.password);
+      if (passwordMatch) return user_;
+      return null;
     },
     setUserPassword: async (_, { user_id, password }) => {
       let user = await User.findById(user_id);
