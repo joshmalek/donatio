@@ -91,6 +91,7 @@ export const resolvers = {
     weekReceipts: async (_, { user_id }) => {
       let week_start = new Date();
       week_start.setDate(week_start.getDate() - week_start.getDay());
+      week_start.setHours(0, 0, 0);
 
       let user_receipts = await Receipt.find({
         user_id: user_id,
