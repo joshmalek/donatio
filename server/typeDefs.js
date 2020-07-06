@@ -5,6 +5,7 @@ export const typeDefs = gql`
     user(_id: String!): User
     userLockedMedals(_id: String!): [Medal]
     users: [User]
+    leaderboard(offset: Int!, limit: Int!): [User]
     nonprofits: [Nonprofit]
     NPOofDay: Nonprofit
     medals: [Medal]
