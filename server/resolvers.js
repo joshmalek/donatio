@@ -105,15 +105,15 @@ export const resolvers = {
     weekReceipts: async (_, { user_id }) => {
       let week_start = new Date();
       week_start.setDate(week_start.getDate() - week_start.getDay());
-      week_start.setHours(0, 0, 0);
+      week_start.setHours(0, 0, 0, 0);
 
       let user_receipts = await Receipt.find({
         user_id: user_id,
-        date_time: { $gt: week_start },
+        date_time: { $gte: week_start },
       });
 
       return user_receipts.map((receipt_) => {
-        receipt_.iso_dateTime = new Date(receipt_.date_time).toISOString();
+        receipt_.date_time = `${receipt_.date_time.toISOString()}`;
         return receipt_;
       });
     },
