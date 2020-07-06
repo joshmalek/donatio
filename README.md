@@ -13,7 +13,7 @@ An AWSRaiseUp project by [Abdul-Muiz Yusuff](https://github.com/sacrael) & [Josh
 
 
 ## Installation
-1. [Install Node.js.] (https://nodejs.org/en/)  The install will come with [NPM](https://www.npmjs.com/), which is required for package management for Node.
+1. [Install Node.js](https://nodejs.org/en/).  The install will come with [NPM](https://www.npmjs.com/), which is required for package management for Node.
 2. Clone the repository to your computer.  This can be done with `git clone https://github.com/joshmalek/donatio.git`.
 1. Run `npm install` in the console to retrieve all necessary NPM packages.
 2. Add a .env to the root folder with MongoDB Atlas database credentials.  A .env can be provided on request.
