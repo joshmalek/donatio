@@ -72,6 +72,20 @@ export const resolvers = {
       return MedalAPI.getMedals();
       // return await Medal.find()
     },
+    leaderboard: async (_, { offset, limit }) => {
+      // Load the leaderboard
+
+      // 1. Get all the users, and sort by the experience value
+      let users = User.find({}, null, {
+        skip: offset,
+        limit: limit,
+        sort: {
+          experience: -1, // sort by experience, descending
+        },
+      });
+
+      return users;
+    },
     initiateTwitterAuth: async (_, __, ctx) => {
       let auth_response = await twitterLiteClient.getRequestToken(
         "https://donatio-site.herokuapp.com/twitter"
