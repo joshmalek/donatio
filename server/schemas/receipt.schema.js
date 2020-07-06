@@ -6,7 +6,7 @@ var ReceiptSchema = new Schema({
   npo_id: Schema.Types.ObjectId,
   user_id: Schema.Types.ObjectId,
   amount: Number,
-  date_time: String,
+  date_time: Date,
   claimed: Boolean,
 });
 

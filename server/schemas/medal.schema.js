@@ -8,7 +8,7 @@ var MedalSchema = new Schema({
   alt_description: String,
   asset_key: String,
   process_func: String,
-  date_awarded: String,
+  date_awarded: Date,
 });
 
 const Medal = mongoose.model("Medal", MedalSchema);
