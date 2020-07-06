@@ -107,9 +107,11 @@ export const resolvers = {
       week_start.setDate(week_start.getDate() - week_start.getDay());
       week_start.setHours(0, 0, 0);
 
+      console.log(`Week start: ${week_start.toISOString()}`);
+
       let user_receipts = await Receipt.find({
         user_id: user_id,
-        date_time: { $gt: week_start },
+        date_time: { $gte: week_start },
       });
 
       return user_receipts.map((receipt_) => {
