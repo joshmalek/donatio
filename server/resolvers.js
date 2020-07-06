@@ -72,7 +72,7 @@ export const resolvers = {
       return MedalAPI.getMedals();
       // return await Medal.find()
     },
-    leaderboard: async (_, { offset, limit, user_id }) => {
+    leaderboard: async (_, { offset, limit }) => {
       // Load the leaderboard
 
       // 1. Get all the users, and sort by the experience value
