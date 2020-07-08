@@ -35,8 +35,8 @@ const startServer = async () => {
   if (config.ssl) {
     server = https.createServer(
       {
-        key: fs.readFileSync("./server.key"),
-        cert: fs.readFileSync("./server.cert"),
+        key: fs.readFileSync("server/src/server.key"),
+        cert: fs.readFileSync("server/src/server.cert"),
       },
       app
     );
@@ -55,7 +55,7 @@ const startServer = async () => {
     // 3.21.56.172
     console.log(
       `Server ready @ http${config.ssl ? "s" : ""}://${config.hostname}/:${
-        config.port
+      config.port
       }${apollo.graphqlPath}`
     );
   });
