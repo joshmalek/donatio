@@ -6,7 +6,7 @@ import axios from "axios";
 const getReceipts = async () => {
   return new Promise((resolve, reject) => {
     axios
-      .get("https://localhost/graphql?query={receipts{amount,date_time}}")
+      .get("https://3.21.56.172/graphql?query={receipts{amount,date_time}}")
       .then((res) => {
         resolve(res.data.data.receipts);
       })
@@ -19,7 +19,7 @@ const getReceipts = async () => {
 const getNPOofDay = async () => {
   return new Promise((resolve, reject) => {
     axios
-      .get("https://localhost/graphql?query={NPOofDay{name,_id,at}}")
+      .get("https://3.21.56.172/graphql?query={NPOofDay{name,_id,at}}")
       .then((res) => {
         resolve(res.data.data.NPOofDay);
       })
@@ -32,7 +32,7 @@ const getNPOofDay = async () => {
 const getAllNPOs = async () => {
   return new Promise((resolve, reject) => {
     axios
-      .get("https://localhost/graphql?query={nonprofits{name,_id,total,at}}")
+      .get("https://3.21.56.172/graphql?query={nonprofits{name,_id,total,at}}")
       .then((res) => {
         resolve(res.data.data.nonprofits);
       })
@@ -46,7 +46,7 @@ const getAllNPOs = async () => {
 const updateNPOTotal = async (_id, day_sum) => {
   return new Promise((resolve, reject) => {
     axios
-      .post("https://localhost/graphql", {
+      .post("https://3.21.56.172/graphql", {
         query: `mutation {updateNonprofitTotal(_id: "${_id}",sum_donated: ${day_sum}) {name,total}}`
       })
       .then((res) => {
@@ -61,7 +61,7 @@ const updateNPOTotal = async (_id, day_sum) => {
 const updateNPOofDay = async (old_id, new_id) => {
   return new Promise((resolve, reject) => {
     axios
-      .post("https://localhost/graphql", {
+      .post("https://3.21.56.172/graphql", {
         query: `mutation {setNPOofDay(old_npo_id: "${old_id}",new_npo_id: "${new_id}") {name,total}}`
       })
       .then((res) => {
