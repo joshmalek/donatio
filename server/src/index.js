@@ -20,15 +20,15 @@ const config = {
 const startServer = async () => {
   const app = express();
 
-  const server = new ApolloServer({
+  const apollo = new ApolloServer({
     typeDefs,
     resolvers,
   });
-  server.applyMiddleware({ app });
+  apollo.applyMiddleware({ app });
 
-  server = https.createServer({
-    key: fs.readFile(`./src/server.key`),
-    cert: fs.readFileSync(`./src/server.crt`)
+  var server = https.createServer({
+    key: fs.readFileSync('server/src/server.key'),
+    cert: fs.readFileSync('server/src/server.cert')
   }, app);
 
   const uri = process.env.ATLAS_URI;
@@ -39,7 +39,7 @@ const startServer = async () => {
     });
 
   server.listen({ port: 4000 }, () => {
-    console.log(`Server ready @ http://3.21.56.172/:4000${server.graphqlPath}`);
+    console.log(`Server ready @ http://3.21.56.172:4000${apollo.graphqlPath}`);
   });
 
   // Start the cron jobs
