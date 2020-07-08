@@ -1,7 +1,7 @@
 import cron from "cron";
 import axios from "axios";
 
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const getReceipts = async () => {
   return new Promise((resolve, reject) => {
