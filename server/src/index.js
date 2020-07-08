@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import { dailyNonprofitSelection } from "../cron_jobs/NonprofitSelection.cron";
 import axios from "axios";
 import { parse } from "qs";
+import https from 'https';
 
 dotenv.config();
 
@@ -26,7 +27,7 @@ const startServer = async () => {
     });
 
   app.listen({ port: 4000 }, () => {
-    console.log(`Server ready @ http://localhost:4000${server.graphqlPath}`);
+    console.log(`Server ready @ http://3.21.56.172/:4000${server.graphqlPath}`);
   });
 
   // Start the cron jobs
