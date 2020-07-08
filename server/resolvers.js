@@ -241,7 +241,7 @@ export const resolvers = {
 
       // compare the password
       let passwordMatch = await comparePasswords(password, user_.password);
-      if (passwordMatch) return user_;
+      if (passwordMatch) return user_.toObject();
       return null;
     },
     setUserPassword: async (_, { user_id, password }) => {
