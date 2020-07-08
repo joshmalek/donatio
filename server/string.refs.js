@@ -1,5 +1,5 @@
 let STRING_REFS = {
-    API_URL: "http://localhost:4000/graphql"
+    API_URL: "https://localhost/graphql"
 }
 
 export { STRING_REFS }
