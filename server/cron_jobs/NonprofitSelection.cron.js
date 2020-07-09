@@ -120,7 +120,10 @@ const dailyNonprofitSelection = new cron.CronJob("0 0 * * *", async () => {
   var npo_list = [];
   console.log("looking for least total donation NPO")
   for (var i = 0; i < nonprofits.length; i++) {
-    npo_list.push([nonprofits[i].total, nonprofits[i]._id, nonprofits[i].name, nonprofits[i].at]);
+    if (nonprofits[i]._id != previous_npo._id) {
+      npo_list.push([nonprofits[i].total, nonprofits[i]._id, nonprofits[i].name, nonprofits[i].at]);
+    }
+
   }
   //pull all NPOs and sort by lowest
   var sorted_npo_list = npo_list.sort(function (a, b) { return a[0] - b[0]; });

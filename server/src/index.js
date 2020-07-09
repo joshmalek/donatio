@@ -35,8 +35,8 @@ const startServer = async () => {
   if (config.ssl) {
     server = https.createServer(
       {
-        key: fs.readFileSync("server/src/server.key"),
-        cert: fs.readFileSync("server/src/server.cert"),
+        key: fs.readFileSync("server/src/ssl/server.key"),
+        cert: fs.readFileSync("server/src/ssl/server.cert"),
       },
       app
     );
@@ -61,7 +61,6 @@ const startServer = async () => {
   });
 
   // Start the cron jobs
-
   dailyNonprofitSelection.start();
 };
 
