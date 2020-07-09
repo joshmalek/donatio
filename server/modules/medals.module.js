@@ -12,7 +12,7 @@ const setupMedals = async () => {
       medals_ = response;
       if (medals_) {
         console.log(`Medal setup complete!`);
-        console.log(medals_);
+        //console.log(medals_);
       } else {
         throw new Error(response.status);
       }
