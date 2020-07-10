@@ -11,11 +11,13 @@ import https from "https";
 import http from "http";
 import { fstat } from "fs";
 import fs from "fs";
+import cors from "cors";
 
 dotenv.config();
 
 const startServer = async () => {
   const app = express();
+  app.use(cors());
 
   const configurations = {
     production: { ssl: true, port: 443, hostname: "3.21.56.172" },
@@ -55,7 +57,7 @@ const startServer = async () => {
     // 3.21.56.172
     console.log(
       `Server ready @ http${config.ssl ? "s" : ""}://${config.hostname}/:${
-      config.port
+        config.port
       }${apollo.graphqlPath}`
     );
   });

@@ -34,6 +34,7 @@
     "apollo-server-express": "^2.14.3",
     "axios": "^0.19.2",
     "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
     "cron": "^1.8.2",
     "dotenv": "^8.2.0",
     "exec-sh": "^0.3.4",
