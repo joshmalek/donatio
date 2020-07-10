@@ -34,7 +34,7 @@ const PlaceOrder = async (donation_amount, currency_code, order_ref_id) => {
       `SET_ORDER_ATTRIBUTES ${process.env.AMAZON_ACCESS_ID} ${process.env.AMAZON_ACCESS_KEY_SECRET} ${process.env.AMAZON_SELLER_ID} ` +
       `na ${currency_code} ${order_ref_id} ${donation_amount}`;
     execSh(
-      `python server/python_modules/amazonPayAPI.py ${args}`,
+      `python3 server/python_modules/amazonPayAPI.py ${args}`,
       true,
       (err, stdout, stderr) => {
         let order_success = false;
@@ -63,7 +63,7 @@ const PythonUserData = async (access_token) => {
   return new Promise((resolve, reject) => {
     let args = `${urlencode(access_token)} ${process.env.AMAZON_CLIENT_ID}`;
     execSh(
-      `python server/python_modules/amazonAuthRequest.py ${args}`,
+      `python3 server/python_modules/amazonAuthRequest.py ${args}`,
       true,
       (err, stdout, stderr) => {
         if (err) {
