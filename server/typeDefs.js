@@ -87,6 +87,7 @@ export const typeDefs = gql`
     email_confirmed: Boolean
     confirmation_string: String
     password: String
+    score: Float
   }
 
   type Medal {

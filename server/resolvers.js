@@ -76,12 +76,46 @@ export const resolvers = {
       // Load the leaderboard
 
       // 1. Get all the users, and sort by the experience value
-      let users = User.find({}, null, {
+      let users = await User.find({}, null, {
         skip: offset,
         limit: limit,
         sort: {
           experience: -1, // sort by experience, descending
         },
+      });
+      console.log(users);
+
+      let week_start = new Date();
+      week_start.setDate(week_start.getDate() - week_start.getDay());
+      week_start.setHours(0, 0, 0, 0);
+
+      // Get all the receipts from each user from the past week and
+      // sum their points.
+      let user_promises = [];
+      users.forEach((user_) => {
+        user_promises.push(
+          new Promise((resolve, reject) => {
+            // STOPPOINT
+            Receipt.find(
+              { user_id: user_._id, date_time: { $gte: week_start } },
+              (err, user_receipts) => {
+                if (err || !user_receipts) return resolve([]);
+                else resolve(user_receipts);
+              }
+            );
+          })
+        );
+      });
+
+      let all_users_reciepts = await Promise.all(user_promises);
+      users.forEach((user_, i) => {
+        let score_ = 0;
+        for (var x = 0; x < all_users_reciepts[i].length; ++x) {
+          score_ += all_users_reciepts[i][x].amount * 10;
+          // TODO ^ Make score evaluation function
+        }
+        // user_ = user_.toObject();
+        user_["score"] = score_;
       });
 
       return users;
