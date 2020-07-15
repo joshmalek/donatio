@@ -20,7 +20,7 @@ const startServer = async () => {
   app.use(cors());
 
   const configurations = {
-    production: { ssl: true, port: 443, hostname: "3.21.56.172" },
+    production: { ssl: true, port: 443, hostname: "3.130.4.139" },
     development: { ssl: false, port: 4000, hostname: "localhost" },
   };
 
@@ -54,10 +54,10 @@ const startServer = async () => {
     });
 
   server.listen({ port: config.port }, () => {
-    // 3.21.56.172
+    // 3.130.4.139
     console.log(
       `Server ready @ http${config.ssl ? "s" : ""}://${config.hostname}/:${
-        config.port
+      config.port
       }${apollo.graphqlPath}`
     );
   });
