@@ -77,7 +77,7 @@ const updateNPOofDay = async (old_id, new_id) => {
 
 
 //run everyday at 12 pm UTC
-const dailyNonprofitSelection = new cron.CronJob("0 0 * * *", async () => {
+const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
   var Twitter = require("twitter");
   var client = new Twitter({
     consumer_key: process.env.DONATIO_CONSUMER_KEY,
@@ -105,8 +105,9 @@ const dailyNonprofitSelection = new cron.CronJob("0 0 * * *", async () => {
   for (var i = 0; i < receipts.length; i++) {
     var parsed_date = Date.parse(receipts[i].date_time);
     //for each receipt, see if it falls between today and yesterday at the time the cron job is run (5pm)
+    console.log("NOT TODAY: " + receipts[i].date_time + " " + receipts[i].amount);
     if (parsed_date > yesterday && parsed_date < today) {
-      //console.log(receipts[i].date_time + " " + receipts[i].amount);
+      console.log("THIS WAS TODAY: " + receipts[i].date_time + " " + receipts[i].amount);
       total_donations_today += receipts[i].amount;
     }
   }
@@ -137,26 +138,26 @@ const dailyNonprofitSelection = new cron.CronJob("0 0 * * *", async () => {
 
   //tweet structure
 
-  client.post(
-    "statuses/update",
-    {
-      status:
-        "Today DonatIO users donated $" +
-        total_donations_today +
-        " to " +
-        previous_npo.at +
-        "!  Thank you to everyone who donated. Our new #NonprofitOfTheDay will be " +
-        sorted_npo_list[0][3] +
-        ".  Let's help them out!",
-    },
-    function (error, tweet, response) {
-      if (!error) {
-        console.log("Tweet successfully posted\n");
-      } else {
-        console.log(error);
-      }
-    }
-  );
+  // client.post(
+  //   "statuses/update",
+  //   {
+  //     status:
+  //       "Today DonatIO users donated $" +
+  //       total_donations_today +
+  //       " to " +
+  //       previous_npo.at +
+  //       "!  Thank you to everyone who donated. Our new #NonprofitOfTheDay will be " +
+  //       sorted_npo_list[0][3] +
+  //       ".  Let's help them out!",
+  //   },
+  //   function (error, tweet, response) {
+  //     if (!error) {
+  //       console.log("Tweet successfully posted\n");
+  //     } else {
+  //       console.log(error);
+  //     }
+  //   }
+  // );
 });
 
 
