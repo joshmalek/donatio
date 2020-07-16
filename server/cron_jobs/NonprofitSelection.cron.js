@@ -102,10 +102,12 @@ const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
   yesterday.toDateString();
   yesterday = Date.parse(yesterday);
   var total_donations_today = 0;
+  console.log("Today: " + today)
+  console.log("Yesterday: " + today)
   for (var i = 0; i < receipts.length; i++) {
     var parsed_date = Date.parse(receipts[i].date_time);
     //for each receipt, see if it falls between today and yesterday at the time the cron job is run (5pm)
-    console.log("NOT TODAY: " + receipts[i].date_time + " " + receipts[i].amount);
+    console.log("NOT TODAY: " + parsed_date + " " + receipts[i].amount);
     if (parsed_date > yesterday && parsed_date < today) {
       console.log("THIS WAS TODAY: " + receipts[i].date_time + " " + receipts[i].amount);
       total_donations_today += receipts[i].amount;
