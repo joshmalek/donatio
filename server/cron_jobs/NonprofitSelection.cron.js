@@ -101,7 +101,10 @@ const dailyNonprofitSelection = new cron.CronJob("* * * * *", async () => {
   //Date.parse converts to int format
   today.toDateString();
   today = Date.parse(today);
+  console.log(today)
+  console.log(yesterday)
   yesterday.toDateString();
+  console.log(yesterday)
   yesterday = Date.parse(yesterday);
   var total_donations_today = 0;
   console.log("Today: " + today)
