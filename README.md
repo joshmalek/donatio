@@ -1,5 +1,3 @@
-# Donatio
-
 <p align="center"><img width=12.5% src="https://github.com/joshmalek/donatio/blob/master/logo192.png"></p>
 
 <p align="center"><img width=100% src="https://github.com/joshmalek/donatio/blob/master/DONATIO-header.png"></p>
