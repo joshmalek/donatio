@@ -60,6 +60,10 @@ const startServer = async () => {
       config.port
       }${apollo.graphqlPath}`
     );
+
+    process.env.TARGET_API_URL = `http${config.ssl ? "s" : ""}://${config.hostname}/:${
+      config.port
+      }${apollo.graphqlPath}`;
   });
 
   // Start the cron jobs

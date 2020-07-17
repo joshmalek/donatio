@@ -95,7 +95,7 @@ export const resolvers = {
       let user_promises = [];
       users.forEach(user_ => {
         user_promises.push( 
-          UserPointsMod(user_._id)
+          UserPointsMod({ user_id: user_._id })
          );
       })
 
