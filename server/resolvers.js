@@ -18,6 +18,7 @@ import {
   twitterCallbackResponse,
 } from "./modules/twitterCallbackMatcher.module";
 import AmazonPayAPI from "./modules/amazonPay.module";
+import UserPointsMod from "./modules/userPoints.module"
 
 import MedalAPI from "./API/medals.api";
 
@@ -92,6 +93,17 @@ export const resolvers = {
       // Get all the receipts from each user from the past week and
       // sum their points.
       let user_promises = [];
+      users.forEach(user_ => {
+        user_promises.push( 
+          UserPointsMod(user_._id)
+         );
+      })
+
+      let all_user_points = await Promise.all(user_promises);
+      users.forEach((user_, i) => {
+        user_["score"] = all_user_points[i];
+      })
+      /*
       users.forEach((user_) => {
         user_promises.push(
           new Promise((resolve, reject) => {
@@ -117,6 +129,8 @@ export const resolvers = {
         // user_ = user_.toObject();
         user_["score"] = score_;
       });
+      */
+
 
       return users;
     },
