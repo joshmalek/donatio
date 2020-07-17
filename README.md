@@ -1,6 +1,6 @@
 <p align="center"><img width=12.5% src="https://github.com/joshmalek/donatio/blob/master/logo192.png"></p>
 
-<p align="center"><img width=100% src="https://github.com/joshmalek/donatio/blob/master/DONATIO-header.png"></p>
+<p align="center"><img width=80% src="https://github.com/joshmalek/donatio/blob/master/DONATIO-header.png"></p>
 
 ![AWS Status](https://img.shields.io/badge/AWS%20Server%20Status-Online-brightgreen)
 ![ISC](https://img.shields.io/badge/license-ISC-blue.svg) 
