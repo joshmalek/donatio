@@ -24,11 +24,6 @@ An AWSRaiseUp project by [Abdul-Muiz Yusuff](https://github.com/sacrael) & [Josh
 * Full Amazon Pay integration, allowing users to use the accounts and payment options they already have.
 * Email confirmation for new accounts, increasing user security and reducing the number of fake accounts.
 
-## Documentation 
-This repo consists of the backend of our product.  
-
-
-
 ## Installation
 1. [Install Node.js](https://nodejs.org/en/).  The install will come with [NPM](https://www.npmjs.com/), which is required for package management for Node.
 2. Clone the repository to your computer.  This can be done with `git clone https://github.com/joshmalek/donatio.git`.
