@@ -27,6 +27,7 @@ const startServer = async () => {
   const environment = process.env.NODE_ENV || "production";
   const config = configurations[environment];
 
+  //enables playground in Production build
   const apollo = new ApolloServer({
     typeDefs,
     resolvers,
