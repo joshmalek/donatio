@@ -1,6 +1,6 @@
-<p align="center"><img width=12.5% src="https://github.com/joshmalek/donatio/blob/master/logo192.png"></p>
+<p align="center"><img width=12.5% src="https://github.com/joshmalek/donatio/blob/master/img/logo192.png"></p>
 
-<p align="center"><img width=80% src="https://github.com/joshmalek/donatio/blob/master/DONATIO-header.png"></p>
+<p align="center"><img width=80% src="https://github.com/joshmalek/donatio/blob/master/img/DONATIO-header.png"></p>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 ![AWS Status](https://img.shields.io/badge/AWS%20Server%20Status-Online-brightgreen)
