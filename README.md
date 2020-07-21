@@ -13,6 +13,11 @@ Be the change you want to see, by buying the things you need.
 
 Donatio is a gamefied platform designed to piggyback on top of current online shopping pages.  A user can choose to donate a percentage of their online purchase (e.g. Amazon) to the Nonprofit of the Day. Our solution uses Amazon Pay for the donation, and the user recieves experience and medals for their donation.  They can share their donations on Twitter, and compete with their friends on the Leaderboard.
 
+You can play with our [sandbox](https://3.130.4.139/graphql), hosted in AWS.
+
+Check out our mobile app [here](https://github.com/joshmalek/donatio-app), or our Chrome extension [here](https://github.com/joshmalek/donatio-extension).
+Check out our live website [here](https://donatio-site.herokuapp.com), or our repo for our site [here](https://github.com/joshmalek/donatio-website).
+
 An AWSRaiseUp project by [Abdul-Muiz Yusuff](https://github.com/sacrael) & [Josh Malek](https://github.com/joshmalek)
 
 ## Features
