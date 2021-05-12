@@ -42,7 +42,7 @@
     "graphql": "^15.1.0",
     "http": "0.0.1-security",
     "mongoose": "^5.9.18",
-    "nodemailer": "^6.4.10",
+    "nodemailer": "^6.4.16",
     "nodemon": "^2.0.4",
     "qs": "^6.9.4",
     "query-string": "^6.13.1",
