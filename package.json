@@ -44,7 +44,7 @@
     "mongoose": "^5.9.18",
     "nodemailer": "^6.4.10",
     "nodemon": "^2.0.4",
-    "qs": "^6.9.4",
+    "qs": "^6.9.7",
     "query-string": "^6.13.1",
     "randomstring": "^1.1.5",
     "sendmail": "^1.6.1",
