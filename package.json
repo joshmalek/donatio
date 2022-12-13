@@ -38,7 +38,7 @@
     "cron": "^1.8.2",
     "dotenv": "^8.2.0",
     "exec-sh": "^0.3.4",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "graphql": "^15.1.0",
     "http": "0.0.1-security",
     "mongoose": "^5.9.18",
